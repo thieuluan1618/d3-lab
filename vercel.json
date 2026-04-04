@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npx ng build --configuration production --source-map",
+  "outputDirectory": "dist/d3-lab/browser",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
