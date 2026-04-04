@@ -1,27 +1,51 @@
-# D3Lab
+# D3 Lab
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+D3 Lab is an Angular 18 + D3.js chart handbook for developers translating Tableau patterns into reusable D3 implementations. It combines example charts, implementation notes, and data-model guidance in a single reference app.
 
-## Development server
+## Live Site
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Explore the deployed guide at [d3-lab.vercel.app](https://d3-lab.vercel.app).
 
-## Code scaffolding
+## What's Inside
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Chart guides for bar, pie, grouped horizontal bar, stacked horizontal bar, line, and bullet charts
+- Documentation pages for chart data models, AI guidance, and Tableau-to-D3 migration concepts
+- Shared chart utilities for resizing, tooltips, click handling, and legends
+- Strict standalone Angular components styled with Tailwind CSS and SCSS
 
-## Build
+## Scripts
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm install
+npm start
+npm test
+npm run build
+```
 
-## Running unit tests
+The dev server runs at `http://localhost:4200`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Project Structure
 
-## Running end-to-end tests
+```text
+src/app/
+├── charts/              # Standalone D3 chart examples, lazy-loaded by route
+├── core/models/         # Shared chart interfaces and view models
+├── core/services/       # Data transformation logic
+├── pages/               # Guide and documentation pages
+└── shared/components/   # Sidebar, tooltip, code block, and other reusable UI
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Development Notes
 
-## Further help
+- Routes are defined in `src/app/app.routes.ts` using `loadComponent`
+- Data is currently hardcoded in components; no backend is involved
+- Static assets should live in `public/`
+- Production deployment is handled through Vercel
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Deployment
+
+The production site is deployed on Vercel. To publish manually:
+
+```bash
+vercel --yes --prod
+```
