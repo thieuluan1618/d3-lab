@@ -1,0 +1,194 @@
+<div class="w-full">
+
+  <div class="mb-10">
+    <h1 class="text-3xl font-extrabold text-slate-900">Data Models Guide</h1>
+    <p class="mt-2 text-base leading-relaxed text-slate-500">A layered model architecture that cleanly separates API data, chart configuration, render-ready data, and tooltip state.</p>
+  </div>
+
+  <!-- Flow diagram -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Data Flow Overview</h2>
+    <div class="flex flex-col items-start gap-0 pl-4">
+      <div class="min-w-[280px] rounded-lg border-2 border-purple-300 bg-purple-50 px-6 py-3 text-center text-sm font-semibold text-purple-700">API Response<br><span class="text-xs font-normal">MetricRecord[] / PeriodData[]</span></div>
+      <div class="py-1.5 pl-8 text-xs italic text-slate-400">↓ ChartTransformService</div>
+      <div class="min-w-[280px] rounded-lg border-2 border-blue-300 bg-blue-50 px-6 py-3 text-center text-sm font-semibold text-blue-700">Chart-Ready Data<br><span class="text-xs font-normal">ChartSeries[] + ChartPoint[]</span></div>
+      <div class="py-1.5 pl-8 text-xs italic text-slate-400">↓ D3 Component</div>
+      <div class="min-w-[280px] rounded-lg border-2 border-green-300 bg-green-50 px-6 py-3 text-center text-sm font-semibold text-green-700">SVG Render<br><span class="text-xs font-normal">rect / path / circle</span></div>
+      <div class="py-1.5 pl-8 text-xs italic text-slate-400">↓ hover events</div>
+      <div class="min-w-[280px] rounded-lg border-2 border-orange-300 bg-orange-50 px-6 py-3 text-center text-sm font-semibold text-orange-700">Tooltip State<br><span class="text-xs font-normal">TooltipContext</span></div>
+    </div>
+  </section>
+
+  <!-- Layer 1 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Layer 1 — Raw / Domain Model</h2>
+    <p class="mb-3 text-sm text-slate-600">The shape of data from the API. Never mutate — pass into the transform service.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-slate-500">// What the API returns</span>
+<span class="text-purple-400">interface</span> <span class="text-blue-400">MetricRecord</span> &#123;
+  date: <span class="text-green-400">string</span>;        <span class="text-slate-500">// ISO string "2024-01-01"</span>
+  value: <span class="text-green-400">number</span>;
+  metadata?: Record&lt;string, unknown&gt;;
+&#125;
+
+<span class="text-purple-400">interface</span> <span class="text-blue-400">PeriodData</span> &#123;
+  period: <span class="text-green-400">string</span>;      <span class="text-slate-500">// "2024-Q1", "2024"</span>
+  records: MetricRecord[];
+&#125;</pre>
+    </div>
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: the raw data source rows before any calculation or filter.</div>
+  </section>
+
+  <!-- Layer 2 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Layer 2 — Chart Config Model</h2>
+    <p class="mb-3 text-sm text-slate-600">Describes <em>how</em> to render — not what data to show.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-purple-400">type</span> <span class="text-blue-400">ChartType</span> = <span class="text-green-400">'bar'</span> | <span class="text-green-400">'hbar'</span> | <span class="text-green-400">'hbar-group'</span> | <span class="text-green-400">'hbar-stack'</span> | <span class="text-green-400">'line'</span> | <span class="text-green-400">'pie'</span> | <span class="text-green-400">'area'</span> | <span class="text-green-400">'scatter'</span>;
+
+<span class="text-purple-400">interface</span> <span class="text-blue-400">ChartConfig</span> &#123;
+  type: ChartType;
+  title: <span class="text-green-400">string</span>;
+  subtitle?: <span class="text-green-400">string</span>;
+
+  <span class="text-slate-500">// Field mapping</span>
+  xKey: <span class="text-green-400">string</span>;                  <span class="text-slate-500">// field → x-axis</span>
+  yKey: <span class="text-green-400">string</span>;                  <span class="text-slate-500">// field → y-axis</span>
+
+  <span class="text-slate-500">// Axis config (Tableau: shelf settings)</span>
+  xAxis?: AxisConfig;           <span class="text-slate-500">// label, format, scaleType, ticks, tickRotation</span>
+  yAxis?: AxisConfig;
+  dualAxis?: DualAxisConfig;    <span class="text-slate-500">// Tableau dual-axis worksheet</span>
+
+  <span class="text-slate-500">// Color</span>
+  colorScheme?: <span class="text-green-400">string</span>[];       <span class="text-slate-500">// defaults to schemeTableau10</span>
+  colorKey?: <span class="text-green-400">string</span>;            <span class="text-slate-500">// field that drives color encoding</span>
+
+  <span class="text-slate-500">// Dimensions</span>
+  margin?: ChartMargin;
+  width?: <span class="text-green-400">number</span>;
+  height?: <span class="text-green-400">number</span>;
+
+  <span class="text-slate-500">// Display toggles</span>
+  showGrid?: <span class="text-green-400">boolean</span>;           <span class="text-slate-500">// horizontal grid lines</span>
+  showValueLabels?: <span class="text-green-400">boolean</span>;    <span class="text-slate-500">// value text on bars / points</span>
+  showDataPoints?: <span class="text-green-400">boolean</span>;     <span class="text-slate-500">// dots on line charts</span>
+  legendPosition?: LegendPosition;
+
+  <span class="text-slate-500">// Interaction</span>
+  enableTooltip?: <span class="text-green-400">boolean</span>;      <span class="text-slate-500">// default true</span>
+  enableHighlight?: <span class="text-green-400">boolean</span>;    <span class="text-slate-500">// legend click → highlight</span>
+  enableBrush?: <span class="text-green-400">boolean</span>;        <span class="text-slate-500">// x-axis brush for zoom/filter</span>
+  enableZoom?: <span class="text-green-400">boolean</span>;         <span class="text-slate-500">// scroll to zoom</span>
+
+  <span class="text-slate-500">// Chart-type-specific</span>
+  curveType?: <span class="text-green-400">'linear'</span> | <span class="text-green-400">'monotoneX'</span> | <span class="text-green-400">'step'</span> | <span class="text-green-400">'basis'</span>;
+  fillArea?: <span class="text-green-400">boolean</span>;           <span class="text-slate-500">// fill under line</span>
+  barPadding?: <span class="text-green-400">number</span>;          <span class="text-slate-500">// 0–1 spacing</span>
+  barRadius?: <span class="text-green-400">number</span>;           <span class="text-slate-500">// rounded bar tops</span>
+  innerRadius?: <span class="text-green-400">number</span>;         <span class="text-slate-500">// 0 = pie, &gt;0 = donut</span>
+&#125;</pre>
+    </div>
+
+    <!-- Sub-interfaces -->
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-purple-400">interface</span> <span class="text-blue-400">AxisConfig</span> &#123;
+  label?: <span class="text-green-400">string</span>;               <span class="text-slate-500">// axis label text</span>
+  format?: <span class="text-green-400">string</span>;              <span class="text-slate-500">// d3-format: ',.0f', '.1%', '%b %Y'</span>
+  scaleType?: ScaleType;        <span class="text-slate-500">// 'band' | 'point' | 'time' | 'linear' | 'log'</span>
+  ticks?: <span class="text-green-400">number</span>;               <span class="text-slate-500">// suggested tick count</span>
+  tickRotation?: <span class="text-green-400">number</span>;        <span class="text-slate-500">// degrees, e.g. -45</span>
+&#125;
+
+<span class="text-purple-400">interface</span> <span class="text-blue-400">DualAxisConfig</span> &#123;
+  yRightKey: <span class="text-green-400">string</span>;            <span class="text-slate-500">// field → right y-axis</span>
+  yRightLabel?: <span class="text-green-400">string</span>;
+  yRightFormat?: <span class="text-green-400">string</span>;
+&#125;</pre>
+    </div>
+
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: the Marks card + Columns/Rows shelf + Format pane + Dual-axis settings, serialized into one typed object.</div>
+  </section>
+
+  <!-- Layer 3 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Layer 3 — Chart Data Model</h2>
+    <p class="mb-3 text-sm text-slate-600">Transformed data ready for D3. One <code class="rounded bg-slate-200 px-1.5 py-0.5 text-xs text-blue-600">ChartSeries</code> per line/bar-group. Multiple series = multi-period comparison.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-purple-400">interface</span> <span class="text-blue-400">ChartPoint</span> &#123;
+  x: <span class="text-green-400">string</span> | Date | <span class="text-green-400">number</span>;
+  y: <span class="text-green-400">number</span>;
+  label?: <span class="text-green-400">string</span>;       <span class="text-slate-500">// optional display label</span>
+  raw?: MetricRecord;   <span class="text-slate-500">// back-reference for tooltip</span>
+&#125;
+
+<span class="text-purple-400">interface</span> <span class="text-blue-400">ChartSeries</span> &#123;
+  id: <span class="text-green-400">string</span>;       <span class="text-slate-500">// e.g. "revenue-2024"</span>
+  label: <span class="text-green-400">string</span>;    <span class="text-slate-500">// shown in legend</span>
+  period: <span class="text-green-400">string</span>;   <span class="text-slate-500">// drives multi-period toggle</span>
+  color?: <span class="text-green-400">string</span>;
+  points: ChartPoint[];
+&#125;</pre>
+    </div>
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: the individual marks on the canvas — one per data point.</div>
+  </section>
+
+  <!-- Layer 4 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Layer 4 — Tooltip Model</h2>
+    <p class="mb-3 text-sm text-slate-600">Aggregates everything needed to render a rich tooltip. Populated on <code class="rounded bg-slate-200 px-1.5 py-0.5 text-xs text-blue-600">mouseover</code> events.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-purple-400">interface</span> <span class="text-blue-400">TooltipContext</span> &#123;
+  x: <span class="text-green-400">string</span> | Date | <span class="text-green-400">number</span>;
+  series: TooltipSeries[];
+  position: &#123; left: <span class="text-green-400">number</span>; top: <span class="text-green-400">number</span> &#125;;
+&#125;
+
+<span class="text-purple-400">interface</span> <span class="text-blue-400">TooltipSeries</span> &#123;
+  id: <span class="text-green-400">string</span>;
+  label: <span class="text-green-400">string</span>;
+  value: <span class="text-green-400">number</span>;
+  delta?: <span class="text-green-400">number</span>;         <span class="text-slate-500">// vs previous period</span>
+  deltaPercent?: <span class="text-green-400">number</span>;  <span class="text-slate-500">// vs previous period (%)</span>
+  color: <span class="text-green-400">string</span>;
+  raw?: MetricRecord;
+&#125;</pre>
+    </div>
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: the Tooltip card — but fully custom. Can embed sparklines, links, delta badges.</div>
+  </section>
+
+  <!-- Layer 5 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Layer 5 — Chart View Model</h2>
+    <p class="mb-3 text-sm text-slate-600">Top-level model for a dashboard panel. Ties config, data, and UI state together.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-purple-400">interface</span> <span class="text-blue-400">ChartView</span> &#123;
+  id: <span class="text-green-400">string</span>;
+  config: ChartConfig;
+  periods: <span class="text-green-400">string</span>[];         <span class="text-slate-500">// all: ["2024", "2023"]</span>
+  series: ChartSeries[];     <span class="text-slate-500">// all series (all periods)</span>
+  activePeriods: <span class="text-green-400">string</span>[];   <span class="text-slate-500">// user-toggled visible</span>
+  tooltip: TooltipContext | <span class="text-purple-400">null</span>;
+&#125;</pre>
+    </div>
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: a single Tableau worksheet — config + data + view state in one place.</div>
+  </section>
+
+  <!-- Transform service -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">The Transform Layer</h2>
+    <p class="mb-3 text-sm text-slate-600">Never transform data inside a D3 component. Use <code class="rounded bg-slate-200 px-1.5 py-0.5 text-xs text-blue-600">ChartTransformService</code> — keeps components as pure renderers.</p>
+    <div class="mb-3 overflow-hidden rounded-lg bg-slate-900 p-5">
+<pre class="font-mono text-[13px] leading-relaxed text-slate-300"><span class="text-slate-500">// PeriodData[] → ChartSeries[]  (multi-period)</span>
+toMultiPeriodSeries(periods: PeriodData[]): ChartSeries[]
+
+<span class="text-slate-500">// Add delta vs previous period to tooltip</span>
+enrichWithDelta(current, prev?): TooltipSeries
+
+<span class="text-slate-500">// ChartPoint[] → % of total  (pie charts)</span>
+toPercentOfTotal(points): ChartPoint[]</pre>
+    </div>
+    <div class="rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-2.5 text-sm text-slate-600">Tableau equivalent: Calculated Fields + Table Calculations — but testable TypeScript functions.</div>
+  </section>
+
+</div>

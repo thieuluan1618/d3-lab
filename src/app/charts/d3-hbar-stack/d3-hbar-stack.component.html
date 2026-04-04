@@ -1,0 +1,68 @@
+<div class="w-full">
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Horizontal Stacked Bar Chart</h2>
+    <p class="mt-1 text-sm text-slate-500">NPS-style comparison using d3.stack() with inline labels and score column</p>
+  </div>
+
+  <!-- Tableau equivalent -->
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Drag a <strong>dimension</strong> to Rows, multiple <strong>measures</strong> to Columns, set Analysis → Stack Marks → On. Mark type = Bar.</div>
+    </div>
+  </div>
+
+  <!-- Live chart -->
+  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-3 flex justify-end">
+      <button
+        (click)="toggleGrid()"
+        class="rounded-md border px-3 py-1 text-xs font-medium transition-colors"
+        [class]="showGrid ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'"
+      >
+        {{ showGrid ? '✓ ' : '' }}Grid Lines
+      </button>
+    </div>
+    <svg #chart></svg>
+    <app-chart-tooltip [state]="tooltip" />
+  </div>
+
+  <!-- Code snippets -->
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="dataModelCode" title="stack-datum.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Stacking — d3.stack()</h3>
+      <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.stack()</code> transforms flat rows into layered series with cumulative [start, end] pairs per segment.</p>
+      <app-code-block [code]="stackCode" title="stack layout" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Stacked Rects — layers + inline labels</h3>
+      <p class="mb-2 text-sm text-slate-500">Each stack layer becomes a <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;g&gt;</code> with a shared fill. Labels are rendered inside segments only when the width exceeds a threshold.</p>
+      <app-code-block [code]="renderCode" title="stacked bar rendering" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
+      <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper shows all three segment values with color indicators on hover.</p>
+      <app-code-block [code]="tooltipCode" title="tooltip events" />
+    </div>
+
+    <!-- Key concepts -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.stack()</code><br><span class="text-xs text-slate-500">Transforms flat data into cumulative [start, end] layers</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">scaleLinear(0–100)</code><br><span class="text-xs text-slate-500">Percentage x-axis with fixed domain</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Inline labels</code><br><span class="text-xs text-slate-500">Centered text inside segments, visibility gated by width</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">NPS score column</code><br><span class="text-xs text-slate-500">Computed promoters − detractors shown before each bar</span></div>
+      </div>
+    </div>
+  </div>
+</div>

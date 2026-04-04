@@ -1,0 +1,84 @@
+<div class="w-full">
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Line Chart</h2>
+    <p class="mt-1 text-sm text-slate-500">Multi-series line chart with configurable curve types, responsive resize, and interactive legend</p>
+  </div>
+
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Mark type = <strong>Line</strong>. Drag a <strong>date</strong> to Columns, a <strong>measure</strong> to Rows, a <strong>dimension</strong> to Color for multi-series.</div>
+    </div>
+  </div>
+
+  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-3 flex gap-2">
+      @for (opt of curveOptions; track opt.key) {
+        <button
+          (click)="setCurve(opt.key)"
+          class="rounded-md border px-3 py-1 text-xs font-medium transition-colors"
+          [class]="activeCurve === opt.key ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'"
+        >
+          {{ activeCurve === opt.key ? '&#10003; ' : '' }}{{ opt.label }}
+        </button>
+      }
+    </div>
+    <svg #chart></svg>
+    <app-chart-tooltip [state]="tooltip" />
+  </div>
+
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="dataModelCode" title="line-series.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Line Generator — d3.line() with configurable curves</h3>
+      <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.line()</code> generates an SVG path. The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.curve()</code> method accepts any D3 curve factory — toggle between <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">monotoneX</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">linear</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">step</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">basis</code>, or <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">cardinal</code> using the buttons above the chart.</p>
+      <app-code-block [code]="lineGenCode" title="configurable curve types" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Point Dots</h3>
+      <app-code-block [code]="dotsCode" title="circle dots" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Grid Lines — the extended tick trick</h3>
+      <p class="mb-2 text-sm text-slate-500">Create a second axis with <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">tickSize(-width)</code> and no labels — gives horizontal grid lines.</p>
+      <app-code-block [code]="gridCode" title="grid lines" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — multi-series aggregation</h3>
+      <p class="mb-2 text-sm text-slate-500">Hover a dot to see <em>all</em> series values at that month. Unlike single-series charts that use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code>, line charts wire mouse events manually to aggregate across series.</p>
+      <app-code-block [code]="tooltipCode" title="multi-series tooltip" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Legend — horizontal with highlight</h3>
+      <p class="mb-2 text-sm text-slate-500">Click a legend item to highlight that series (others dim to 12% opacity). Click again to reset. Uses <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">drawLegend</code> with <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">layout: 'horizontal'</code> and <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">onHighlight</code> callback.</p>
+      <app-code-block [code]="legendCode" title="interactive legend" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Responsive Resize — observeResize()</h3>
+      <p class="mb-2 text-sm text-slate-500">All charts use a shared <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">observeResize</code> helper that wraps <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">ResizeObserver</code> with debounce. On resize: clear SVG, re-read container width, and re-draw at the new size.</p>
+      <app-code-block [code]="resizeCode" title="resize pattern" />
+    </div>
+
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.line()</code><br><span class="text-xs text-slate-500">Path generator: array → SVG path string</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">.curve(factory)</code><br><span class="text-xs text-slate-500">Configurable interpolation: monotoneX, linear, step, basis, cardinal</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.scalePoint()</code><br><span class="text-xs text-slate-500">Ordinal scale with fixed spacing (no bands)</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">datum() vs data()</code><br><span class="text-xs text-slate-500">datum binds entire array to one path element</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">observeResize()</code><br><span class="text-xs text-slate-500">ResizeObserver + debounce for responsive re-render</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">drawLegend(onHighlight)</code><br><span class="text-xs text-slate-500">Click to highlight series, click again to reset</span></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="w-full">
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Bar Chart</h2>
+    <p class="mt-1 text-sm text-slate-500">Vertical bar chart using scaleBand + scaleLinear</p>
+  </div>
+
+  <!-- Tableau equivalent -->
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Drag a <strong>dimension</strong> to Columns, a <strong>measure</strong> to Rows, mark type = Bar.</div>
+    </div>
+  </div>
+
+  <!-- Live chart -->
+  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <svg #chart></svg>
+    <app-chart-tooltip [state]="tooltip" />
+  </div>
+
+  <!-- Code snippets -->
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="dataModelCode" title="bar-datum.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Scales — the key to every bar chart</h3>
+      <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleBand</code> divides the x-axis into evenly spaced bands. <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear</code> maps values to height.</p>
+      <app-code-block [code]="scalesCode" title="scales setup" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Bars — the join pattern</h3>
+      <p class="mb-2 text-sm text-slate-500">D3's <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.join()</code> binds data to SVG <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;rect&gt;</code> elements — one rect per data point.</p>
+      <app-code-block [code]="renderCode" title="bar rendering" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
+      <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events + opacity toggle. Use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;ng-content&gt;</code> to project custom Angular components into the tooltip.</p>
+      <app-code-block [code]="tooltipCode" title="tooltip events" />
+    </div>
+
+    <!-- Key concepts -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.scaleBand()</code><br><span class="text-xs text-slate-500">Maps categories to pixel bands with padding</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.scaleLinear()</code><br><span class="text-xs text-slate-500">Maps numeric domain to pixel range</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">.join('rect')</code><br><span class="text-xs text-slate-500">Data → DOM binding (enter/update/exit)</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.axisBottom()</code><br><span class="text-xs text-slate-500">Auto-generates tick marks and labels</span></div>
+      </div>
+    </div>
+  </div>
+</div>

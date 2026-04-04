@@ -1,0 +1,53 @@
+<div class="w-full">
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Pie Chart</h2>
+    <p class="mt-1 text-sm text-slate-500">Pie chart using d3.pie() layout + d3.arc() path generator</p>
+  </div>
+
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Mark type = <strong>Pie</strong>. Drag a <strong>dimension</strong> to Color, a <strong>measure</strong> to Angle/Size.</div>
+    </div>
+  </div>
+
+  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <svg #chart></svg>
+    <app-chart-tooltip [state]="tooltip" />
+  </div>
+
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="dataModelCode" title="pie-datum.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Layout — d3.pie() + d3.arc()</h3>
+      <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.pie()</code> computes angles. <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.arc()</code> converts angles to SVG paths. Set <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">innerRadius > 0</code> for a donut chart.</p>
+      <app-code-block [code]="layoutCode" title="pie + arc layout" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Slices</h3>
+      <app-code-block [code]="renderCode" title="slice rendering" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
+      <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events to each slice. Access <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d.data</code> for the original PieDatum. Use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;ng-content&gt;</code> to inject custom Angular components.</p>
+      <app-code-block [code]="tooltipCode" title="tooltip on slices" />
+    </div>
+
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.pie()</code><br><span class="text-xs text-slate-500">Layout that computes startAngle/endAngle</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">d3.arc()</code><br><span class="text-xs text-slate-500">Path generator from arc angles</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">arc.centroid()</code><br><span class="text-xs text-slate-500">Returns [x,y] midpoint of an arc</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">scaleOrdinal(schemeTableau10)</code><br><span class="text-xs text-slate-500">Tableau's own 10-color palette</span></div>
+      </div>
+    </div>
+  </div>
+</div>

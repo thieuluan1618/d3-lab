@@ -1,0 +1,18 @@
+@if (state.visible) {
+  <div
+    class="tooltip"
+    [ngStyle]="{ left: state.x + 'px', top: state.y + 'px' }"
+  >
+    <div class="tooltip-title">{{ state.title }}</div>
+    @for (row of state.rows; track row.label) {
+      <div class="tooltip-row">
+        @if (row.color) {
+          <span class="tooltip-swatch" [ngStyle]="{ background: row.color }"></span>
+        }
+        <span class="tooltip-label">{{ row.label }}</span>
+        <span class="tooltip-value">{{ row.value }}</span>
+      </div>
+    }
+    <ng-content />
+  </div>
+}

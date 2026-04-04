@@ -1,0 +1,111 @@
+<div class="w-full">
+
+  <div class="mb-10">
+    <h1 class="text-3xl font-extrabold text-slate-900">Tableau → D3 Concept Map</h1>
+    <p class="mt-2 text-base leading-relaxed text-slate-500">Every Tableau concept has a D3 equivalent. This page maps them 1-to-1 so you can reason about your migration.</p>
+  </div>
+
+  <!-- Shelves → Scales -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Shelves &amp; Cards → Scales</h2>
+    <p class="mb-4 text-sm text-slate-600">In Tableau, you drag fields onto shelves. In D3, <strong>scales</strong> map a data domain to a visual range.</p>
+    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-900 text-xs uppercase tracking-wide text-slate-300">
+          <tr><th class="px-4 py-3">Tableau</th><th class="px-4 py-3">D3 Equivalent</th><th class="px-4 py-3">Notes</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Columns shelf (categorical)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleBand()</code></td><td class="px-4 py-2.5 text-slate-500">Evenly spaced bands with padding</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Columns shelf (continuous)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleTime()</code></td><td class="px-4 py-2.5 text-slate-500">Date/time x-axis</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Rows shelf (measure)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear()</code></td><td class="px-4 py-2.5 text-slate-500">Numeric domain to pixel range</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Rows shelf (log scale)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLog()</code></td><td class="px-4 py-2.5 text-slate-500">Logarithmic scale</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Color shelf (categorical)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleOrdinal(schemeTableau10)</code></td><td class="px-4 py-2.5 text-slate-500">D3 ships Tableau's own palette</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Color shelf (continuous)</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleSequential(interpolateBlues)</code></td><td class="px-4 py-2.5 text-slate-500">Value to color gradient</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Size shelf</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleSqrt()</code></td><td class="px-4 py-2.5 text-slate-500">sqrt for area-based sizing (bubbles)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Marks → SVG -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Marks → SVG Elements</h2>
+    <p class="mb-4 text-sm text-slate-600">Tableau's Mark type sets what shape represents each row. In D3, you choose the SVG element directly.</p>
+    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-900 text-xs uppercase tracking-wide text-slate-300">
+          <tr><th class="px-4 py-3">Tableau Mark</th><th class="px-4 py-3">D3 / SVG Element</th><th class="px-4 py-3">Notes</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Bar</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;rect&gt;</code></td><td class="px-4 py-2.5 text-slate-500">x, y, width, height from scales</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Line</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;path&gt;</code> via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.line()</code></td><td class="px-4 py-2.5 text-slate-500">Line generator computes <code class="text-xs">d</code> attribute</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Area</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;path&gt;</code> via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.area()</code></td><td class="px-4 py-2.5 text-slate-500">Fills between two y values</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Circle</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;circle&gt;</code></td><td class="px-4 py-2.5 text-slate-500">cx, cy, r from scales</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Pie / Donut</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;path&gt;</code> via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.arc()</code></td><td class="px-4 py-2.5 text-slate-500"><code class="text-xs">d3.pie()</code> computes angles, <code class="text-xs">d3.arc()</code> draws them</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Text label</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;text&gt;</code></td><td class="px-4 py-2.5 text-slate-500">Append to SVG or arc centroid</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Map / Polygon</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;path&gt;</code> via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.geoPath()</code></td><td class="px-4 py-2.5 text-slate-500">GeoJSON → SVG path</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Filters & Calculated Fields -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Filters &amp; Calculated Fields → Service Layer</h2>
+    <p class="mb-4 text-sm text-slate-600">Tableau filters and calculated fields run before rendering. In D3, this happens in your <strong>transform service</strong>.</p>
+    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-900 text-xs uppercase tracking-wide text-slate-300">
+          <tr><th class="px-4 py-3">Tableau</th><th class="px-4 py-3">D3 / Angular Equivalent</th><th class="px-4 py-3">Where</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Dimension filter</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">data.filter(d =&gt; ...)</code></td><td class="px-4 py-2.5 text-slate-500">Service / signal</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Date range filter</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">data.filter(d =&gt; d.date &gt;= start)</code></td><td class="px-4 py-2.5 text-slate-500">Service / signal</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Calculated field</td><td class="px-4 py-2.5">Derived property in transform service</td><td class="px-4 py-2.5 text-slate-500">ChartTransformService</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">% of Total</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">toPercentOfTotal(points)</code></td><td class="px-4 py-2.5 text-slate-500">ChartTransformService</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Difference from previous</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">enrichWithDelta()</code></td><td class="px-4 py-2.5 text-slate-500">ChartTransformService</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">LOD FIXED expression</td><td class="px-4 py-2.5">Pre-aggregate before chart</td><td class="px-4 py-2.5 text-slate-500">Service / API layer</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">LOD INCLUDE / EXCLUDE</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.rollup()</code></td><td class="px-4 py-2.5 text-slate-500">Service layer</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Pages shelf → multi-period -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Pages Shelf &amp; Dual Axis → Multi-Period &amp; Multi-Scale</h2>
+    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-900 text-xs uppercase tracking-wide text-slate-300">
+          <tr><th class="px-4 py-3">Tableau</th><th class="px-4 py-3">D3 Equivalent</th><th class="px-4 py-3">Notes</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Pages shelf</td><td class="px-4 py-2.5">Multiple <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">ChartSeries</code> + period toggle</td><td class="px-4 py-2.5 text-slate-500">User toggles periods, chart re-renders</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Dual axis</td><td class="px-4 py-2.5">Two y-scales (<code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">yLeft</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">yRight</code>)</td><td class="px-4 py-2.5 text-slate-500">Two axis &lt;g&gt; groups on same SVG</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Synchronized axis</td><td class="px-4 py-2.5">Share scale instance via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&#64;Input()</code></td><td class="px-4 py-2.5 text-slate-500">Pass scale across components</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Reference line</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;line&gt;</code> with fixed y</td><td class="px-4 py-2.5 text-slate-500">Append after main chart</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Reference band</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;rect&gt;</code> with low opacity</td><td class="px-4 py-2.5 text-slate-500">Append before data (renders behind)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tooltip -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">Tooltip → Custom HTML Overlay</h2>
+    <div class="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-900 text-xs uppercase tracking-wide text-slate-300">
+          <tr><th class="px-4 py-3">Tableau Tooltip</th><th class="px-4 py-3">D3 Equivalent</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Auto tooltip on hover</td><td class="px-4 py-2.5"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">mouseover</code> / <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">mousemove</code> → set <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">TooltipContext</code></td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Custom tooltip fields</td><td class="px-4 py-2.5">Full HTML template — any Angular component</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Viz in tooltip</td><td class="px-4 py-2.5">Embed a mini SVG/chart inside the tooltip</td></tr>
+          <tr class="hover:bg-slate-50"><td class="px-4 py-2.5 font-semibold text-purple-600">Tooltip actions</td><td class="px-4 py-2.5">Click handlers inside tooltip HTML → router navigation</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

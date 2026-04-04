@@ -1,0 +1,253 @@
+<div class="w-full">
+  <!-- Header -->
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-slate-900">AI-Assisted Development with Claude Code</h2>
+    <p class="mt-2 text-sm text-slate-500">How to create project-specific LLM context and Claude Skills so AI follows your exact patterns — not generic boilerplate.</p>
+  </div>
+
+  <!-- Mermaid diagram -->
+  <div class="mb-8 rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-slate-100 px-6 py-3">
+      <h3 class="text-base font-semibold text-slate-800">D3 Handbook — Architecture Overview</h3>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-400">Scroll to zoom, drag to pan</span>
+        <div class="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-1">
+          <button (click)="zoomOut()" class="px-1.5 py-0.5 text-sm text-slate-500 hover:text-slate-800">-</button>
+          <span class="min-w-[3rem] text-center text-xs font-mono text-slate-600">{{ zoomLevel }}%</span>
+          <button (click)="zoomIn()" class="px-1.5 py-0.5 text-sm text-slate-500 hover:text-slate-800">+</button>
+        </div>
+        <button
+          (click)="resetZoom()"
+          class="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100"
+        >
+          Fit
+        </button>
+      </div>
+    </div>
+    <div #mermaidDiagram class="overflow-hidden" style="height: 600px;"></div>
+  </div>
+
+  <!-- The key insight -->
+  <div class="mb-8 rounded-lg border border-blue-200 bg-blue-50 px-5 py-4">
+    <h3 class="text-sm font-bold text-blue-800">The key insight</h3>
+    <p class="mt-1 text-sm text-blue-700">
+      A <code class="rounded bg-blue-100 px-1 text-xs">CLAUDE.md</code> alone tells AI <em>what</em> your project is.
+      A <strong>domain handbook</strong> (like <code class="rounded bg-blue-100 px-1 text-xs">d3handbook.md</code>) tells AI <em>how</em> to write code in it —
+      every pattern, helper API, convention, and decision. Combined with <strong>Claude Skills</strong>, developers get one-command workflows
+      that produce code matching your codebase on the first try.
+    </p>
+  </div>
+
+  <!-- The 3 layers -->
+  <div class="mb-10 grid grid-cols-3 gap-4">
+    <div class="rounded-lg border-2 border-slate-200 bg-white p-4">
+      <div class="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">Layer 1</div>
+      <h4 class="text-sm font-bold text-slate-800">CLAUDE.md</h4>
+      <p class="mt-1 text-xs text-slate-500">Short project overview. Points to the handbook. Auto-loaded every session.</p>
+    </div>
+    <div class="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+      <div class="mb-1 text-xs font-bold uppercase tracking-wider text-blue-400">Layer 2</div>
+      <h4 class="text-sm font-bold text-blue-800">Domain Handbook</h4>
+      <p class="mt-1 text-xs text-blue-600">Deep context: data models, component patterns, helper APIs, conventions, Tableau mapping. The real differentiator.</p>
+    </div>
+    <div class="rounded-lg border-2 border-emerald-200 bg-emerald-50 p-4">
+      <div class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-400">Layer 3</div>
+      <h4 class="text-sm font-bold text-emerald-800">Claude Skills</h4>
+      <p class="mt-1 text-xs text-emerald-600">Reusable prompt templates: <code class="text-xs">/new-chart</code>, <code class="text-xs">/migrate-tableau</code>, <code class="text-xs">/review-chart</code>. One command, full workflow.</p>
+    </div>
+  </div>
+
+  <div class="space-y-10">
+
+    <!-- Why this is different -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Why a Handbook, not just CLAUDE.md?</h3>
+      <p class="mb-3 text-sm text-slate-500">Most guides stop at CLAUDE.md. That's like giving a new hire a one-page onboarding doc. Here's the difference:</p>
+      <app-code-block [code]="comparisonCode" language="bash" title="context depth comparison" />
+    </div>
+
+    <!-- Project structure -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Project Structure</h3>
+      <p class="mb-3 text-sm text-slate-500">Place these files at your project root. Claude Code auto-discovers <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">CLAUDE.md</code> and <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.claude/</code>.</p>
+      <app-code-block [code]="folderStructureCode" language="bash" title="folder layout" />
+    </div>
+
+    <!-- CLAUDE.md -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">CLAUDE.md — The Pointer</h3>
+      <p class="mb-3 text-sm text-slate-500">Keep it short. Its job is to orient AI and point to the handbook for depth.</p>
+      <app-code-block [code]="claudeMdCode" language="markdown" title="CLAUDE.md" />
+    </div>
+
+    <!-- d3handbook.md -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">d3handbook.md — The Deep Context</h3>
+      <p class="mb-3 text-sm text-slate-500">
+        This is the <strong>real differentiator</strong>. It captures everything a developer (human or AI) needs to write code that fits your codebase:
+        data model architecture, component patterns, helper API signatures, convention rules, and a Tableau→D3 mapping table.
+        See <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3handbook.md</code> at the project root for the full file.
+      </p>
+      <app-code-block [code]="handbookExcerptCode" language="markdown" title="d3handbook.md (excerpt)" />
+      <div class="mt-3 flex items-center gap-3">
+        <button
+          (click)="downloadHandbook()"
+          class="inline-flex items-center gap-2 rounded-lg border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
+        >
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Download d3handbook.md
+        </button>
+        <span class="text-xs text-slate-400">Full file — ready to drop into your project root</span>
+      </div>
+      <div class="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+        <div class="text-xs font-bold text-amber-800">What makes a good handbook?</div>
+        <ul class="mt-1 space-y-0.5 text-xs text-amber-700">
+          <li>- Interface definitions with field-level comments</li>
+          <li>- Exact function signatures and their behavior</li>
+          <li>- The component pattern as a code template (not just description)</li>
+          <li>- Convention rules with the <strong>why</strong> (e.g. "highlight not hide — because users need to see the dimmed context")</li>
+          <li>- Step-by-step checklists for common tasks</li>
+          <li>- Mapping tables for domain concepts (Tableau→D3 in our case)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider: Skills section -->
+    <div class="border-t border-slate-200 pt-8">
+      <h2 class="mb-2 text-xl font-bold text-slate-900">Claude Skills</h2>
+      <p class="text-sm text-slate-500">
+        Skills are reusable prompt templates stored in <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.claude/skills/&lt;name&gt;/SKILL.md</code>.
+        Each becomes a slash command. They combine your handbook context with a structured workflow.
+      </p>
+    </div>
+
+    <!-- Skill format -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">SKILL.md Format</h3>
+      <p class="mb-3 text-sm text-slate-500">
+        Every skill has YAML frontmatter (configuration) + markdown body (instructions).
+      </p>
+      <app-code-block [code]="skillFormatCode" language="yaml" title="SKILL.md structure" />
+
+      <div class="mt-4 rounded-lg border border-slate-200 bg-white p-4">
+        <h4 class="mb-2 text-sm font-semibold text-slate-800">Key frontmatter options</h4>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">name</code><br><span class="text-slate-500">Becomes the /slash-command name</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">description</code><br><span class="text-slate-500">When Claude should auto-invoke this skill</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">argument-hint</code><br><span class="text-slate-500">Shown in autocomplete, e.g. [chart-name]</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">disable-model-invocation</code><br><span class="text-slate-500">Only manual invoke (prevents auto-trigger)</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">context: fork</code><br><span class="text-slate-500">Run in isolated subagent (for reviews/research)</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">agent: Explore</code><br><span class="text-slate-500">Read-only subagent type (safe for audits)</span></div>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-lg border border-slate-200 bg-white p-4">
+        <h4 class="mb-2 text-sm font-semibold text-slate-800">Variable substitution</h4>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">$ARGUMENTS</code><br><span class="text-slate-500">Everything after the command name</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">$0, $1, $2</code><br><span class="text-slate-500">Positional arguments (space-separated)</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">!`shell cmd`</code><br><span class="text-slate-500">Shell output injected before Claude sees it</span></div>
+          <div class="rounded bg-slate-50 px-3 py-2"><code class="font-semibold text-blue-600">{{'$\{CLAUDE_SKILL_DIR\}'}}</code><br><span class="text-slate-500">Path to the skill's directory</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skill: /new-chart -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Skill: /new-chart</h3>
+      <p class="mb-1 text-sm text-slate-500">Scaffolds a complete chart component. Usage: <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">/new-chart scatter</code></p>
+      <div class="mb-3 flex gap-2">
+        <span class="rounded bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">manual only</span>
+        <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">accepts arguments</span>
+      </div>
+      <app-code-block [code]="newChartSkillCode" language="yaml" title=".claude/skills/new-chart/SKILL.md" />
+    </div>
+
+    <!-- Skill: /migrate-tableau -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Skill: /migrate-tableau</h3>
+      <p class="mb-1 text-sm text-slate-500">Converts a Tableau worksheet description into D3 code following your patterns.</p>
+      <div class="mb-3 flex gap-2">
+        <span class="rounded bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-700">manual only</span>
+        <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">interactive</span>
+      </div>
+      <app-code-block [code]="migrateSkillCode" language="yaml" title=".claude/skills/migrate-tableau/SKILL.md" />
+    </div>
+
+    <!-- Skill: /review-chart -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Skill: /review-chart</h3>
+      <p class="mb-1 text-sm text-slate-500">Audits a chart component against your conventions. Usage: <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">/review-chart src/app/charts/d3-bar/d3-bar.component.ts</code></p>
+      <div class="mb-3 flex gap-2">
+        <span class="rounded bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">runs in isolated fork</span>
+        <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">read-only (Explore agent)</span>
+      </div>
+      <app-code-block [code]="reviewSkillCode" language="yaml" title=".claude/skills/review-chart/SKILL.md" />
+    </div>
+
+    <!-- Permissions -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">Settings — Tool Permissions</h3>
+      <p class="mb-3 text-sm text-slate-500">
+        Pre-approve safe commands in <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.claude/settings.json</code> so AI doesn't ask for confirmation every time.
+      </p>
+      <app-code-block [code]="settingsCode" language="json" title=".claude/settings.json" />
+    </div>
+
+    <!-- Prompt quality -->
+    <div>
+      <h3 class="mb-1 text-lg font-bold text-slate-900">The Impact of Context Depth</h3>
+      <p class="mb-3 text-sm text-slate-500">Same request, different context setups — see how output quality scales with context depth.</p>
+      <app-code-block [code]="promptExampleCode" language="bash" title="context depth → output quality" />
+    </div>
+
+    <!-- Workflow diagram -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-4 text-base font-semibold text-slate-800">How It All Fits Together</h3>
+      <div class="flex items-start gap-3 text-xs">
+        <div class="flex-1 rounded-lg bg-slate-50 px-3 py-2 text-center">
+          <div class="font-bold text-slate-700">Developer</div>
+          <div class="mt-1 text-slate-500">Types <code>/new-chart scatter</code></div>
+        </div>
+        <span class="mt-3 text-slate-400">&rarr;</span>
+        <div class="flex-1 rounded-lg bg-blue-50 px-3 py-2 text-center">
+          <div class="font-bold text-blue-700">SKILL.md</div>
+          <div class="mt-1 text-blue-500">Structured steps + $ARGUMENTS</div>
+        </div>
+        <span class="mt-3 text-slate-400">&rarr;</span>
+        <div class="flex-1 rounded-lg bg-amber-50 px-3 py-2 text-center">
+          <div class="font-bold text-amber-700">d3handbook.md</div>
+          <div class="mt-1 text-amber-500">Patterns, APIs, conventions</div>
+        </div>
+        <span class="mt-3 text-slate-400">&rarr;</span>
+        <div class="flex-1 rounded-lg bg-emerald-50 px-3 py-2 text-center">
+          <div class="font-bold text-emerald-700">Output</div>
+          <div class="mt-1 text-emerald-500">Complete component matching your codebase</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skill scopes -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Skill Scopes</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm">
+          <code class="font-semibold text-blue-600">.claude/skills/</code><br>
+          <span class="text-xs text-slate-500"><strong>Project skills</strong> — committed to git, shared with team. Best for project-specific workflows.</span>
+        </div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm">
+          <code class="font-semibold text-blue-600">~/.claude/skills/</code><br>
+          <span class="text-xs text-slate-500"><strong>Personal skills</strong> — local only, available across all projects. Best for personal utilities.</span>
+        </div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm">
+          <code class="font-semibold text-blue-600">disable-model-invocation: true</code><br>
+          <span class="text-xs text-slate-500"><strong>Manual only</strong> — prevents accidental auto-trigger. Use for side-effectful operations.</span>
+        </div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm">
+          <code class="font-semibold text-blue-600">context: fork</code><br>
+          <span class="text-xs text-slate-500"><strong>Isolated execution</strong> — runs in a subagent. Use for reviews, research, and audits.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

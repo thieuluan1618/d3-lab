@@ -1,0 +1,74 @@
+<div class="w-full">
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Bullet / Ranked Bar Chart</h2>
+    <p class="mt-1 text-sm text-slate-500">Horizontal bars with background tracks, sorted by value, with a reference line</p>
+  </div>
+
+  <!-- Tableau equivalent -->
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Drag a <strong>dimension</strong> to Rows (sorted), a <strong>measure</strong> to Columns, add a <strong>reference line</strong> at a constant value.</div>
+    </div>
+  </div>
+
+  <!-- Live chart -->
+  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-3 flex justify-end">
+      <button
+        (click)="toggleGrid()"
+        class="rounded-md border px-3 py-1 text-xs font-medium transition-colors"
+        [class]="showGrid ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'"
+      >
+        {{ showGrid ? '✓ ' : '' }}Grid Lines
+      </button>
+    </div>
+    <svg #chart></svg>
+    <app-chart-tooltip [state]="tooltip" />
+  </div>
+
+  <!-- Code snippets -->
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="dataModelCode" title="bullet-datum.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Background Tracks</h3>
+      <p class="mb-2 text-sm text-slate-500">Full-width gray <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">rect</code> elements drawn first so value bars render on top.</p>
+      <app-code-block [code]="trackCode" title="track rects" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Bars &amp; Labels</h3>
+      <p class="mb-2 text-sm text-slate-500">Value bars use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear</code> for width. Labels are positioned at the end of each bar.</p>
+      <app-code-block [code]="renderCode" title="bar + label rendering" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
+      <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events + opacity toggle on the value bars.</p>
+      <app-code-block [code]="tooltipCode" title="tooltip events" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Reference Line</h3>
+      <p class="mb-2 text-sm text-slate-500">A dashed vertical line at <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">x = 100</code> serves as the index baseline.</p>
+      <app-code-block [code]="referenceLineCode" title="reference line" />
+    </div>
+
+    <!-- Key concepts -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Background tracks</code><br><span class="text-xs text-slate-500">Full-width gray rects behind value bars for visual context</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Reference line</code><br><span class="text-xs text-slate-500">Dashed vertical line at a constant value (index baseline)</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Sorted data</code><br><span class="text-xs text-slate-500">Data sorted descending so highest values appear at top</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Value labels</code><br><span class="text-xs text-slate-500">Text elements positioned at bar ends for direct readout</span></div>
+      </div>
+    </div>
+  </div>
+</div>

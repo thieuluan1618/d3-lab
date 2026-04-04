@@ -1,0 +1,172 @@
+<div class="w-full">
+
+  <!-- Header -->
+  <div class="mb-10">
+    <h1 class="text-3xl font-extrabold text-slate-900">D3.js Handbook</h1>
+    <p class="mt-2 text-base leading-relaxed text-slate-500">
+      A practical guide for migrating Tableau charts to D3 — for teams building data-rich Angular applications.
+    </p>
+  </div>
+
+  <!-- What is D3 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">What is D3?</h2>
+    <p class="mb-3 text-sm leading-relaxed text-slate-600">
+      <strong>D3 (Data-Driven Documents)</strong> is a JavaScript library for binding data to the DOM and
+      applying data-driven transformations. It does <em>not</em> draw charts — it gives you
+      the primitives to build <em>exactly</em> the chart you need, at any level of complexity.
+    </p>
+    <div class="mt-3 rounded-r-lg border-l-4 border-blue-400 bg-blue-50 px-4 py-3 text-sm leading-relaxed text-slate-700">
+      <strong>Core philosophy:</strong> D3 is not a charting library. It is a <em>data visualization toolkit</em>.
+      You describe the relationship between data and DOM — D3 handles the math.
+    </div>
+  </section>
+
+  <!-- D3 vs Others -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">D3 vs Other Libraries</h2>
+    <p class="mb-4 text-sm text-slate-600">Understanding where D3 sits in the ecosystem is essential before choosing it:</p>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- D3 -->
+      <div class="rounded-lg border border-slate-200 border-t-[3px] border-t-blue-500 bg-white p-4">
+        <div class="mb-1 font-bold text-blue-600">D3.js</div>
+        <span class="mb-3 inline-block rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-blue-600">Low-level</span>
+        <ul class="mb-3 list-inside list-disc space-y-1 text-xs text-slate-500">
+          <li>You own the rendering</li>
+          <li>Fully custom visuals</li>
+          <li>SVG / Canvas / HTML</li>
+          <li>Scales, layouts, generators</li>
+          <li>High code volume</li>
+          <li>No ceiling on complexity</li>
+        </ul>
+        <div class="border-t pt-2 text-[11px] italic text-slate-400">Best for: custom, complex, branded charts</div>
+      </div>
+
+      <!-- Chart.js -->
+      <div class="rounded-lg border border-slate-200 border-t-[3px] border-t-green-500 bg-white p-4">
+        <div class="mb-1 font-bold text-green-600">Chart.js</div>
+        <span class="mb-3 inline-block rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-green-600">High-level</span>
+        <ul class="mb-3 list-inside list-disc space-y-1 text-xs text-slate-500">
+          <li>Config-driven API</li>
+          <li>Opinionated defaults</li>
+          <li>Canvas-based</li>
+          <li>Limited customization</li>
+          <li>Low code volume</li>
+          <li>Hits a ceiling fast</li>
+        </ul>
+        <div class="border-t pt-2 text-[11px] italic text-slate-400">Best for: dashboards with standard charts</div>
+      </div>
+
+      <!-- Highcharts -->
+      <div class="rounded-lg border border-slate-200 border-t-[3px] border-t-orange-500 bg-white p-4">
+        <div class="mb-1 font-bold text-orange-600">Highcharts</div>
+        <span class="mb-3 inline-block rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-orange-600">High-level</span>
+        <ul class="mb-3 list-inside list-disc space-y-1 text-xs text-slate-500">
+          <li>Declarative config object</li>
+          <li>Rich built-in chart types</li>
+          <li>Commercial license</li>
+          <li>Good accessibility</li>
+          <li>Moderate customization</li>
+          <li>Strong defaults</li>
+        </ul>
+        <div class="border-t pt-2 text-[11px] italic text-slate-400">Best for: enterprise BI with standard needs</div>
+      </div>
+
+      <!-- Tableau -->
+      <div class="rounded-lg border border-slate-200 border-t-[3px] border-t-purple-500 bg-white p-4">
+        <div class="mb-1 font-bold text-purple-600">Tableau</div>
+        <span class="mb-3 inline-block rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-purple-600">GUI-driven</span>
+        <ul class="mb-3 list-inside list-disc space-y-1 text-xs text-slate-500">
+          <li>Drag-and-drop interface</li>
+          <li>No code required</li>
+          <li>Built-in data connectors</li>
+          <li>LOD expressions</li>
+          <li>Limited embed flexibility</li>
+          <li>Expensive at scale</li>
+        </ul>
+        <div class="border-t pt-2 text-[11px] italic text-slate-400">Best for: ad-hoc analysis, non-dev users</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D3 Philosophy Deep Dive -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">D3's Core Philosophy</h2>
+    <div class="space-y-4">
+
+      <div class="flex gap-5 rounded-lg border border-slate-200 bg-white p-4">
+        <div class="text-2xl font-extrabold text-blue-400">01</div>
+        <div>
+          <strong class="text-sm text-slate-800">Selections — not components</strong>
+          <p class="mt-1 text-[13px] leading-relaxed text-slate-500">D3 selects DOM elements and binds data to them. There is no "BarChart" class. You build it from <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">rect</code> elements joined to data arrays.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5 rounded-lg border border-slate-200 bg-white p-4">
+        <div class="text-2xl font-extrabold text-blue-400">02</div>
+        <div>
+          <strong class="text-sm text-slate-800">Scales — the heart of every chart</strong>
+          <p class="mt-1 text-[13px] leading-relaxed text-slate-500">Scales map a data domain (e.g. 0–100) to a visual range (e.g. 0–500px). Master <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleBand</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleTime</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleOrdinal</code> and you can build anything.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5 rounded-lg border border-slate-200 bg-white p-4">
+        <div class="text-2xl font-extrabold text-blue-400">03</div>
+        <div>
+          <strong class="text-sm text-slate-800">Enter / Update / Exit pattern</strong>
+          <p class="mt-1 text-[13px] leading-relaxed text-slate-500">When data changes, D3 reconciles DOM nodes: <em>enter</em> adds new, <em>update</em> modifies existing, <em>exit</em> removes stale. This is D3's version of diffing.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5 rounded-lg border border-slate-200 bg-white p-4">
+        <div class="text-2xl font-extrabold text-blue-400">04</div>
+        <div>
+          <strong class="text-sm text-slate-800">You write the tooltip</strong>
+          <p class="mt-1 text-[13px] leading-relaxed text-slate-500">Unlike Tableau or Chart.js, D3 has no built-in tooltip. This is a feature — your tooltip can contain anything: sparklines, deltas, drill-down links, custom HTML.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-5 rounded-lg border border-slate-200 bg-white p-4">
+        <div class="text-2xl font-extrabold text-blue-400">05</div>
+        <div>
+          <strong class="text-sm text-slate-800">Layouts compute — you render</strong>
+          <p class="mt-1 text-[13px] leading-relaxed text-slate-500">D3 layouts (pie, stack, hierarchy, force) compute positions and angles. They never touch the DOM. You take those numbers and render however you choose.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- When to use D3 -->
+  <section class="mb-12">
+    <h2 class="mb-4 border-b-2 border-blue-400 pb-2 text-xl font-bold text-slate-900">When to choose D3 over a higher-level library</h2>
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <div class="mb-3 text-sm font-bold text-slate-800">Choose D3 when you need:</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Custom tooltip with delta, drilldown, or rich content</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Multi-period overlays on the same axis</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Brush / zoom / pan interactions</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Animated transitions between data states</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Non-standard chart types (sankey, chord, treemap)</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Pixel-perfect branded visuals</div>
+          <div class="flex items-center gap-2 rounded bg-green-50 px-3 py-1.5 text-sm text-green-700"><span class="font-bold">&#10003;</span> Full control over axes, grid, labels</div>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <div class="mb-3 text-sm font-bold text-slate-800">Consider Chart.js / Highcharts when:</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 rounded bg-red-50 px-3 py-1.5 text-sm text-red-600"><span class="font-bold">&#10007;</span> Standard chart types are sufficient</div>
+          <div class="flex items-center gap-2 rounded bg-red-50 px-3 py-1.5 text-sm text-red-600"><span class="font-bold">&#10007;</span> Rapid prototyping is the priority</div>
+          <div class="flex items-center gap-2 rounded bg-red-50 px-3 py-1.5 text-sm text-red-600"><span class="font-bold">&#10007;</span> Team has no D3 experience and no time to learn</div>
+          <div class="flex items-center gap-2 rounded bg-red-50 px-3 py-1.5 text-sm text-red-600"><span class="font-bold">&#10007;</span> Built-in responsive behavior is needed quickly</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
