@@ -20,6 +20,7 @@ import * as d3 from 'd3';
 import { initSvg, attachTooltip, drawLegend, LegendItem, observeResize } from '../../core/utils/d3.helpers';
 import { ChartClickEvent } from '../../core/models';
 import { MockApiService } from '../../core/services/mock-api.service';
+import { HBAR_STACK_SNIPPETS } from './d3-hbar-stack.snippets';
 
 export interface StackDatum {
   label: string;
@@ -61,49 +62,7 @@ export class D3HbarStackComponent implements OnInit, OnDestroy, OnChanges {
   private readonly api = inject(MockApiService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  dataModelCode = `interface StackDatum {
-  label: string;       // company / row label
-  promoters: number;   // % promoters
-  neutrals: number;    // % neutrals
-  detractors: number;  // % detractors
-}`;
-
-  stackCode = `// d3.stack() transforms flat rows into layered series
-const stack = d3.stack<StackDatum>()
-  .keys(['promoters', 'neutrals', 'detractors']);
-
-const series = stack(data);
-// series[0] = promoters layer  → [[0, 48.8], [0, 50.5], ...]
-// series[1] = neutrals layer   → [[48.8, 79.5], ...]
-// series[2] = detractors layer → [[79.5, 100], ...]`;
-
-  renderCode = `// Each series layer becomes a <g>, each datum a <rect>
-svg.selectAll('g.layer')
-  .data(series)
-  .join('g')
-    .attr('fill', d => color(d.key))
-  .selectAll('rect')
-  .data(d => d)
-  .join('rect')
-    .attr('y', d => y(d.data.label))
-    .attr('x', d => x(d[0]))
-    .attr('width', d => x(d[1]) - x(d[0]))
-    .attr('height', y.bandwidth());
-
-// Inline labels — only when segment is wide enough
-layer.append('text')
-  .filter(d => x(d[1]) - x(d[0]) > 30)
-  .text(d => \`\${(d[1] - d[0]).toFixed(1)}%\`);`;
-
-  tooltipCode = `// Show all three segments in tooltip rows with color dots
-attachTooltip(rects, callbacks, (d) => ({
-  title: d.data.label,
-  rows: [
-    { color: '#22c55e', label: 'Promoters',  value: d.data.promoters },
-    { color: '#eab308', label: 'Neutrals',   value: d.data.neutrals },
-    { color: '#f97316', label: 'Detractors', value: d.data.detractors },
-  ],
-}));`;
+  readonly snippets = HBAR_STACK_SNIPPETS;
 
   ngOnInit(): void {
     if (this.chartData.data.length) {

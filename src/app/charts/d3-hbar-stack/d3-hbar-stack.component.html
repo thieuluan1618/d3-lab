@@ -69,25 +69,25 @@
   <div class="space-y-6">
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
-      <app-code-block [code]="dataModelCode" title="stack-datum.ts" />
+      <app-code-block [code]="snippets.dataModel" title="stack-datum.ts" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Stacking — d3.stack()</h3>
       <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.stack()</code> transforms flat rows into layered series with cumulative [start, end] pairs per segment.</p>
-      <app-code-block [code]="stackCode" title="stack layout" />
+      <app-code-block [code]="snippets.stack" title="stack layout" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Stacked Rects — layers + inline labels</h3>
       <p class="mb-2 text-sm text-slate-500">Each stack layer becomes a <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;g&gt;</code> with a shared fill. Labels are rendered inside segments only when the width exceeds a threshold.</p>
-      <app-code-block [code]="renderCode" title="stacked bar rendering" />
+      <app-code-block [code]="snippets.render" title="stacked bar rendering" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
       <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper shows all three segment values with color indicators on hover.</p>
-      <app-code-block [code]="tooltipCode" title="tooltip events" />
+      <app-code-block [code]="snippets.tooltip" title="tooltip events" />
     </div>
 
     <!-- Key concepts -->

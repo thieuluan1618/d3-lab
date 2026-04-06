@@ -60,25 +60,25 @@
   <div class="space-y-6">
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
-      <app-code-block [code]="dataModelCode" title="bar-datum.ts" />
+      <app-code-block [code]="snippets.dataModel" title="bar-datum.ts" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Scales — the key to every bar chart</h3>
       <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleBand</code> divides the x-axis into evenly spaced bands. <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear</code> maps values to height.</p>
-      <app-code-block [code]="scalesCode" title="scales setup" />
+      <app-code-block [code]="snippets.scales" title="scales setup" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Bars — the join pattern</h3>
       <p class="mb-2 text-sm text-slate-500">D3's <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.join()</code> binds data to SVG <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;rect&gt;</code> elements — one rect per data point.</p>
-      <app-code-block [code]="renderCode" title="bar rendering" />
+      <app-code-block [code]="snippets.render" title="bar rendering" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
       <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events + opacity toggle. Use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;ng-content&gt;</code> to project custom Angular components into the tooltip.</p>
-      <app-code-block [code]="tooltipCode" title="tooltip events" />
+      <app-code-block [code]="snippets.tooltip" title="tooltip events" />
     </div>
 
     <!-- Key concepts -->

@@ -69,42 +69,42 @@
   <div class="space-y-6">
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
-      <app-code-block [code]="dataModelCode" title="line-series.ts" />
+      <app-code-block [code]="snippets.dataModel" title="line-series.ts" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Line Generator — d3.line() with configurable curves</h3>
       <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">d3.line()</code> generates an SVG path. The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">.curve()</code> method accepts any D3 curve factory — toggle between <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">monotoneX</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">linear</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">step</code>, <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">basis</code>, or <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">cardinal</code> using the buttons above the chart.</p>
-      <app-code-block [code]="lineGenCode" title="configurable curve types" />
+      <app-code-block [code]="snippets.lineGen" title="configurable curve types" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Data Point Dots</h3>
-      <app-code-block [code]="dotsCode" title="circle dots" />
+      <app-code-block [code]="snippets.dots" title="circle dots" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Grid Lines — the extended tick trick</h3>
       <p class="mb-2 text-sm text-slate-500">Create a second axis with <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">tickSize(-width)</code> and no labels — gives horizontal grid lines.</p>
-      <app-code-block [code]="gridCode" title="grid lines" />
+      <app-code-block [code]="snippets.grid" title="grid lines" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — multi-series aggregation</h3>
       <p class="mb-2 text-sm text-slate-500">Hover a dot to see <em>all</em> series values at that month. Unlike single-series charts that use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code>, line charts wire mouse events manually to aggregate across series.</p>
-      <app-code-block [code]="tooltipCode" title="multi-series tooltip" />
+      <app-code-block [code]="snippets.tooltip" title="multi-series tooltip" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Legend — horizontal with highlight</h3>
       <p class="mb-2 text-sm text-slate-500">Click a legend item to highlight that series (others dim to 12% opacity). Click again to reset. Uses <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">drawLegend</code> with <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">layout: 'horizontal'</code> and <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">onHighlight</code> callback.</p>
-      <app-code-block [code]="legendCode" title="interactive legend" />
+      <app-code-block [code]="snippets.legend" title="interactive legend" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Responsive Resize — observeResize()</h3>
       <p class="mb-2 text-sm text-slate-500">All charts use a shared <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">observeResize</code> helper that wraps <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">ResizeObserver</code> with debounce. On resize: clear SVG, re-read container width, and re-draw at the new size.</p>
-      <app-code-block [code]="resizeCode" title="resize pattern" />
+      <app-code-block [code]="snippets.resize" title="resize pattern" />
     </div>
 
     <div class="rounded-lg border border-slate-200 bg-white p-5">

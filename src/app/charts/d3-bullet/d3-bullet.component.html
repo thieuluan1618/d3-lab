@@ -69,31 +69,31 @@
   <div class="space-y-6">
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
-      <app-code-block [code]="dataModelCode" title="bullet-datum.ts" />
+      <app-code-block [code]="snippets.dataModel" title="bullet-datum.ts" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Background Tracks</h3>
       <p class="mb-2 text-sm text-slate-500">Full-width gray <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">rect</code> elements drawn first so value bars render on top.</p>
-      <app-code-block [code]="trackCode" title="track rects" />
+      <app-code-block [code]="snippets.track" title="track rects" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering Bars &amp; Labels</h3>
       <p class="mb-2 text-sm text-slate-500">Value bars use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleLinear</code> for width. Labels are positioned at the end of each bar.</p>
-      <app-code-block [code]="renderCode" title="bar + label rendering" />
+      <app-code-block [code]="snippets.render" title="bar + label rendering" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
       <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events + opacity toggle on the value bars.</p>
-      <app-code-block [code]="tooltipCode" title="tooltip events" />
+      <app-code-block [code]="snippets.tooltip" title="tooltip events" />
     </div>
 
     <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Reference Line</h3>
       <p class="mb-2 text-sm text-slate-500">A dashed vertical line at <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">x = 100</code> serves as the index baseline.</p>
-      <app-code-block [code]="referenceLineCode" title="reference line" />
+      <app-code-block [code]="snippets.referenceLine" title="reference line" />
     </div>
 
     <!-- Key concepts -->
