@@ -1,0 +1,64 @@
+@if (state.visible) {
+  <div
+    class="absolute z-50 rounded-lg border border-slate-200 bg-white shadow-lg"
+    [style.left.px]="state.x"
+    [style.top.px]="state.y"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Action buttons row -->
+    <div class="flex items-center gap-1 border-b border-slate-100 px-2 py-1.5">
+      <button
+        (click)="onAction('keepOnly')"
+        class="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-700"
+        title="Keep Only"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Keep Only
+      </button>
+      <button
+        (click)="onAction('exclude')"
+        class="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-slate-600 hover:bg-red-50 hover:text-red-700"
+        title="Exclude"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+        </svg>
+        Exclude
+      </button>
+      <div class="mx-1 h-4 w-px bg-slate-200"></div>
+      <button
+        (click)="onAction('sort')"
+        class="rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+        title="Sort"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+        </svg>
+      </button>
+      <button
+        (click)="onAction('viewTable')"
+        class="rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+        title="View Data Table"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Selection summary -->
+    <div class="px-3 py-2 text-xs text-slate-500">
+      <div class="font-medium text-slate-700">{{ state.selectedLabels.length }} item{{ state.selectedLabels.length > 1 ? 's' : '' }} selected</div>
+      @if (state.summaryText) {
+        <div class="mt-0.5">{{ state.summaryText }}</div>
+      }
+      <div class="mt-1 space-y-0.5">
+        @for (label of state.selectedLabels; track label) {
+          <div class="text-slate-600">{{ label }}</div>
+        }
+      </div>
+    </div>
+  </div>
+}

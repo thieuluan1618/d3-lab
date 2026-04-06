@@ -10,24 +10,60 @@
     <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
     <div>
       <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
-      <div class="text-sm text-purple-600">Drag a <strong>dimension</strong> to Rows, multiple <strong>measures</strong> to Columns, set Analysis → Stack Marks → On. Mark type = Bar.</div>
+      <div class="text-sm text-purple-600">Drag a <strong>dimension</strong> to Rows, multiple <strong>measures</strong> to Columns, set Analysis &rarr; Stack Marks &rarr; On. Mark type = Bar.</div>
     </div>
   </div>
 
+  <!-- Data Flow Overview -->
+  <div class="mb-6 rounded-lg border border-slate-200 bg-white p-5">
+    <h3 class="mb-3 text-base font-semibold text-slate-800">Data Flow Overview</h3>
+    <div class="flex items-center gap-2 text-sm">
+      <div class="rounded bg-blue-50 px-3 py-1.5 text-blue-700 font-medium">MockApiService<br><span class="text-xs font-normal">ApiStackRecord[]</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-amber-50 px-3 py-1.5 text-amber-700 font-medium">Transform<br><span class="text-xs font-normal">map &rarr; HbarStackInput</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-green-50 px-3 py-1.5 text-green-700 font-medium">&#64;Input() chartData<br><span class="text-xs font-normal">data[] + keys[] + colors map</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-purple-50 px-3 py-1.5 text-purple-700 font-medium">D3 Layout<br><span class="text-xs font-normal">d3.stack() &rarr; layered rects</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-rose-50 px-3 py-1.5 text-rose-700 font-medium">Tooltip<br><span class="text-xs font-normal">All segments + NPS score</span></div>
+    </div>
+  </div>
+
+  <!-- Active filter indicator -->
+  @if (activeFilterLabel) {
+    <div class="mb-3 flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm text-blue-700">
+      <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+      </svg>
+      <span>{{ activeFilterLabel }}</span>
+      <button (click)="clearFilters()" class="ml-auto rounded px-2 py-0.5 text-xs font-medium text-blue-600 hover:bg-blue-100">Clear Filters</button>
+    </div>
+  }
+
   <!-- Live chart -->
-  <div #chartContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-    <div class="mb-3 flex justify-end">
+  <div #chartContainer class="relative mb-8 overflow-x-auto rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-xs text-slate-400">Click a bar to select. Shift+click for multi-select.</p>
       <button
         (click)="toggleGrid()"
         class="rounded-md border px-3 py-1 text-xs font-medium transition-colors"
         [class]="showGrid ? 'border-blue-300 bg-blue-50 text-blue-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'"
       >
-        {{ showGrid ? '✓ ' : '' }}Grid Lines
+        {{ showGrid ? '&#10003; ' : '' }}Grid Lines
       </button>
     </div>
     <svg #chart></svg>
     <app-chart-tooltip [state]="tooltip" />
+    <app-chart-action-menu
+      [state]="actionMenu"
+      (action)="onAction($event)"
+      (dismiss)="dismissMenu()"
+    />
   </div>
+
+  <!-- Data table modal -->
+  <app-data-table-modal [config]="dataTable" (close)="closeDataTable()" />
 
   <!-- Code snippets -->
   <div class="space-y-6">
@@ -59,9 +95,9 @@
       <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
       <div class="grid grid-cols-2 gap-3">
         <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-shape/stack" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">d3.stack()</code></a><br><span class="text-xs text-slate-500">Transforms flat data into cumulative [start, end] layers</span></div>
-        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-scale/linear" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">scaleLinear(0–100)</code></a><br><span class="text-xs text-slate-500">Percentage x-axis with fixed domain</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-scale/linear" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">scaleLinear(0-100)</code></a><br><span class="text-xs text-slate-500">Percentage x-axis with fixed domain</span></div>
         <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Inline labels</code><br><span class="text-xs text-slate-500">Centered text inside segments, visibility gated by width</span></div>
-        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">NPS score column</code><br><span class="text-xs text-slate-500">Computed promoters − detractors shown before each bar</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">NPS score column</code><br><span class="text-xs text-slate-500">Computed promoters - detractors shown before each bar</span></div>
       </div>
     </div>
   </div>

@@ -72,28 +72,30 @@ export function attachTooltip<GElement extends SVGElement, Datum>(
   selection: d3.Selection<GElement, Datum, SVGGElement | SVGSVGElement, unknown>,
   callbacks: TooltipCallbacks,
   buildRows: (d: Datum) => { title: string; rows: TooltipRow[] },
+  container?: HTMLElement,
 ): void {
+  function coords(event: MouseEvent): { x: number; y: number } {
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left + container.scrollLeft,
+        y: event.clientY - rect.top + container.scrollTop,
+      };
+    }
+    return { x: event.offsetX, y: event.offsetY };
+  }
+
   selection
     .style('cursor', 'pointer')
     .on('mouseover', (event: MouseEvent, d: Datum) => {
       const { title, rows } = buildRows(d);
-      callbacks.onUpdate({
-        visible: true,
-        x: event.offsetX,
-        y: event.offsetY,
-        title,
-        rows,
-      });
+      const { x, y } = coords(event);
+      callbacks.onUpdate({ visible: true, x, y, title, rows });
       d3.select(event.currentTarget as SVGElement).attr('opacity', '0.7');
     })
     .on('mousemove', (event: MouseEvent) => {
-      callbacks.onUpdate({
-        visible: true,
-        x: event.offsetX,
-        y: event.offsetY,
-        title: '',
-        rows: [],
-      });
+      const { x, y } = coords(event);
+      callbacks.onUpdate({ visible: true, x, y, title: '', rows: [] });
     })
     .on('mouseleave', (event: MouseEvent) => {
       callbacks.onUpdate(emptyTooltip());
