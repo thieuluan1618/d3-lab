@@ -79,6 +79,12 @@
     </div>
 
     <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Legend Highlight — data-key selector</h3>
+      <p class="mb-2 text-sm text-slate-500">Uses <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">data-key</code> attribute selectors instead of CSS classes to handle names with spaces correctly.</p>
+      <app-code-block [code]="snippets.legend" title="legend highlight" />
+    </div>
+
+    <div>
       <h3 class="mb-2 text-base font-semibold text-slate-800">Tooltip — attachTooltip() helper</h3>
       <p class="mb-2 text-sm text-slate-500">The <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">attachTooltip</code> helper wires mouse events. Tooltip title includes the period label for context. Use <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;ng-content&gt;</code> to project custom Angular components.</p>
       <app-code-block [code]="snippets.tooltip" title="tooltip on nested bars" />
@@ -90,7 +96,8 @@
         <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Small multiples</code><br><span class="text-xs text-slate-500">One panel per period with shared scales</span></div>
         <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-scale/band" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">Nested scaleBand</code></a><br><span class="text-xs text-slate-500">Outer band for groups, inner band for sub-items</span></div>
         <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Value labels</code><br><span class="text-xs text-slate-500">Text elements at bar ends for direct reading</span></div>
-        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Shared x-domain</code><br><span class="text-xs text-slate-500">Max across all periods for consistent comparison</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">Dynamic height</code><br><span class="text-xs text-slate-500">Chart height scales with number of groups and subgroups</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-blue-600">data-key selectors</code><br><span class="text-xs text-slate-500">Attribute selectors for legend highlight (handles spaces in names)</span></div>
       </div>
     </div>
   </div>

@@ -236,7 +236,9 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
     const availableWidth = Math.max(500, containerWidth) - margin.left - margin.right;
     const panelWidth = Math.max(150, (availableWidth - (filteredPeriods.length - 1) * gap) / filteredPeriods.length);
     const totalWidth = margin.left + filteredPeriods.length * panelWidth + (filteredPeriods.length - 1) * gap + margin.right;
-    const chartHeight = Math.max(320, groups.length * 45 + margin.top + margin.bottom);
+    const barHeight = 18;
+    const groupHeight = subgroups.length * barHeight + 4;
+    const chartHeight = Math.max(320, groups.length * groupHeight + margin.top + margin.bottom);
     const height = chartHeight - margin.top - margin.bottom;
 
     const root = d3
@@ -255,7 +257,7 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
       .scaleBand()
       .domain(groups)
       .range([0, height])
-      .padding(0.25);
+      .padding(0.1);
 
     const y1 = d3
       .scaleBand()
@@ -263,7 +265,7 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
       .range([0, y0.bandwidth()])
       .padding(0.1);
 
-    // Shared x-scale — domain includes negative values (e.g. NPS)
+    // Shared x-scale across all periods
     const xMax = d3.max(filteredPeriods, (p) =>
       d3.max(p.data, (d) => Math.max(...subgroups.map((k) => d[k] as number)))
     ) ?? 100;
@@ -296,11 +298,6 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
         .attr('fill', '#334155')
         .text(period.label);
 
-      // X-axis per panel
-      panel
-        .append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(4));
 
       // Groups → bars
       const groupSels = panel
@@ -314,7 +311,7 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
         .selectAll('rect')
         .data((d) => subgroups.map((key) => ({ key, value: d[key] as number, group: d.group })))
         .join('rect')
-        .attr('class', (d) => `bar-${d.key}`)
+        .attr('data-key', (d) => d.key)
         .attr('data-group', (d) => d.group)
         .attr('y', (d) => y1(d.key) ?? 0)
         .attr('x', (d) => Math.min(x(0), x(d.value)))
@@ -328,7 +325,8 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
         .selectAll<SVGTextElement, SubgroupDatum>('text.label')
         .data((d) => subgroups.map((key) => ({ key, value: d[key] as number, group: d.group })))
         .join('text')
-        .attr('class', (d) => `label label-${d.key}`)
+        .attr('class', 'label')
+        .attr('data-key', (d) => d.key)
         .attr('data-group', (d) => d.group)
         .attr('x', (d) => d.value >= 0 ? x(d.value) + 4 : x(d.value) - 4)
         .attr('y', (d) => (y1(d.key) ?? 0) + y1.bandwidth() / 2)
@@ -415,10 +413,7 @@ export class D3HbarGroupComponent implements OnInit, OnDestroy, OnChanges {
         const svgSel = d3.select(svgEl);
         subgroups.forEach((key) => {
           const isActive = highlighted === null || key === highlighted;
-          svgSel.selectAll(`.bar-${key}`)
-            .transition().duration(300)
-            .style('opacity', isActive ? 1 : 0.12);
-          svgSel.selectAll(`.label-${key}`)
+          svgSel.selectAll(`[data-key="${key}"]`)
             .transition().duration(300)
             .style('opacity', isActive ? 1 : 0.12);
         });

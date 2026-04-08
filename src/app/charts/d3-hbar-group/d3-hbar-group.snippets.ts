@@ -12,7 +12,12 @@ interface PeriodData {
 
 const subgroups = ['ProductA', 'ProductB', 'ProductC'];`,
 
-  scales: `// Shared y-axis across all periods
+  scales: `// Dynamic height based on number of groups & subgroups
+const barHeight = 18;
+const groupHeight = subgroups.length * barHeight + 12;
+const chartHeight = Math.max(320, groups.length * groupHeight + margin.top + margin.bottom);
+
+// Shared y-axis across all periods
 const y0 = d3.scaleBand()
   .domain(groups)
   .range([0, height])
@@ -48,6 +53,7 @@ periods.forEach((period, i) => {
   groups.selectAll('rect')
     .data(d => subgroups.map(key => ({ key, value: d[key] })))
     .join('rect')
+    .attr('data-key', d => d.key)       // use data-attr for legend highlight
     .attr('y', d => y1(d.key))
     .attr('width', d => x(d.value))
     .attr('height', y1.bandwidth())
@@ -57,6 +63,8 @@ periods.forEach((period, i) => {
   groups.selectAll('text.label')
     .data(d => subgroups.map(key => ({ key, value: d[key] })))
     .join('text')
+    .attr('class', 'label')
+    .attr('data-key', d => d.key)       // use data-attr for legend highlight
     .attr('x', d => x(d.value) + 4)
     .attr('y', d => y1(d.key) + y1.bandwidth() / 2)
     .text(d => d.value);
@@ -86,10 +94,25 @@ groups.selectAll('text.label')
   .data(d => subgroups.map(key => ({ key, value: d[key] })))
   .join('text')
   .attr('class', 'label')
+  .attr('data-key', d => d.key)
   .attr('x', d => x(d.value) + 4)       // 4px right of bar end
   .attr('y', d => y1(d.key) + y1.bandwidth() / 2)
   .attr('dominant-baseline', 'middle')
   .attr('font-size', '11px')
   .attr('fill', '#64748b')
   .text(d => d.value);`,
+
+  legend: `// Legend highlight using data-key attribute selector
+// Handles names with spaces (e.g. "Bellin Health") correctly
+drawLegend(root, legendItems, margin.left, 12, {
+  layout: 'horizontal',
+  onHighlight: (highlighted) => {
+    subgroups.forEach((key) => {
+      const isActive = highlighted === null || key === highlighted;
+      svgSel.selectAll(\`[data-key="\${key}"]\`)
+        .transition().duration(300)
+        .style('opacity', isActive ? 1 : 0.12);
+    });
+  },
+});`,
 };

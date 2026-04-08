@@ -125,7 +125,6 @@ export class MockApiService {
           { metric: 'Access (CES)', 'Bellin Health': 65.1, 'Hospital Sisters': 60.1, 'Aurora Health': 40.8, 'ThedaCare': 37.5 },
           { metric: 'Motivation', 'Bellin Health': 72.2, 'Hospital Sisters': 65.1, 'Aurora Health': 46.3, 'ThedaCare': 39.2 },
           { metric: 'Experience', 'Bellin Health': 77.1, 'Hospital Sisters': 55.7, 'Aurora Health': 44.3, 'ThedaCare': 36.8 },
-          { metric: 'NPS', 'Bellin Health': -6.0, 'Hospital Sisters': -25.7, 'Aurora Health': -18.2, 'ThedaCare': -32.1 },
         ],
       },
       {
@@ -139,7 +138,6 @@ export class MockApiService {
           { metric: 'Access (CES)', 'Bellin Health': 67.3, 'Hospital Sisters': 62.4, 'Aurora Health': 42.5, 'ThedaCare': 39.1 },
           { metric: 'Motivation', 'Bellin Health': 74.8, 'Hospital Sisters': 67.3, 'Aurora Health': 48.1, 'ThedaCare': 41.0 },
           { metric: 'Experience', 'Bellin Health': 79.5, 'Hospital Sisters': 58.2, 'Aurora Health': 46.0, 'ThedaCare': 38.5 },
-          { metric: 'NPS', 'Bellin Health': -3.2, 'Hospital Sisters': -22.1, 'Aurora Health': -15.8, 'ThedaCare': -29.4 },
         ],
       },
     ]).pipe(delay(this.DELAY_MS));
