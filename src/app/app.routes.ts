@@ -46,4 +46,8 @@ export const routes: Routes = [
     path: 'guide/bullet',
     loadComponent: () => import('./charts/d3-bullet/d3-bullet.component').then((m) => m.D3BulletComponent),
   },
+  {
+    path: 'guide/heatmap-table',
+    loadComponent: () => import('./charts/d3-heatmap-table/d3-heatmap-table').then((m) => m.D3HeatmapTableComponent),
+  },
 ];

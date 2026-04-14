@@ -1,0 +1,11 @@
+.heatmap-table {
+  th,
+  td {
+    border: 1px solid #e2e8f0;
+  }
+}
+
+.heatmap-cell {
+  cursor: default;
+  min-width: 72px;
+}

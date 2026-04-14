@@ -38,6 +38,7 @@ export class SidebarComponent {
         { label: 'Horizontal Stacked Bar', route: '/guide/hbar-stack' },
         { label: 'Bullet / Ranked Bar', route: '/guide/bullet' },
         { label: 'Line Chart', route: '/guide/line' },
+        { label: 'Heat Map Table', route: '/guide/heatmap-table' },
       ],
     },
   ];

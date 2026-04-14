@@ -1,0 +1,112 @@
+<div class="w-full">
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-xl font-bold text-slate-900">Heat Map Table</h2>
+    <p class="mt-1 text-sm text-slate-500">HTML table with D3 sequential color scale on cell backgrounds</p>
+  </div>
+
+  <!-- Tableau equivalent -->
+  <div class="mb-6 flex items-start gap-3 rounded-lg border border-purple-200 bg-purple-50 px-4 py-3">
+    <span class="mt-0.5 text-lg text-purple-500">&#9670;</span>
+    <div>
+      <div class="text-sm font-semibold text-purple-800">Tableau Equivalent</div>
+      <div class="text-sm text-purple-600">Highlight Table — drag a <strong>dimension</strong> to Rows and Columns, a <strong>measure</strong> to Color and Label.</div>
+    </div>
+  </div>
+
+  <!-- Data Flow Overview -->
+  <div class="mb-6 rounded-lg border border-slate-200 bg-white p-5">
+    <h3 class="mb-3 text-base font-semibold text-slate-800">Data Flow Overview</h3>
+    <div class="flex items-center gap-2 text-sm">
+      <div class="rounded bg-blue-50 px-3 py-1.5 text-blue-700 font-medium">MockApiService<br><span class="text-xs font-normal">HeatmapTableData</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-amber-50 px-3 py-1.5 text-amber-700 font-medium">Color Scale<br><span class="text-xs font-normal">d3.scaleSequential</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-green-50 px-3 py-1.5 text-green-700 font-medium">&#64;Input() data<br><span class="text-xs font-normal">HeatmapTableData</span></div>
+      <span class="text-slate-400">&rarr;</span>
+      <div class="rounded bg-purple-50 px-3 py-1.5 text-purple-700 font-medium">HTML Table<br><span class="text-xs font-normal">&lt;table&gt; + ngStyle</span></div>
+    </div>
+  </div>
+
+  <!-- Live chart -->
+  <div #tableContainer class="relative mb-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm overflow-visible">
+    @if (loading) {
+      <div class="flex h-40 items-center justify-center text-sm text-slate-400">Loading…</div>
+    } @else {
+      <div class="overflow-x-auto">
+      <table class="heatmap-table w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            <th class="px-3 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider"></th>
+            @for (col of data.columns; track col) {
+              <th class="px-3 py-2 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ col }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of data.rows; track row) {
+            <tr>
+              <td class="px-3 py-2 text-sm font-medium text-slate-700 whitespace-nowrap">{{ row }}</td>
+              @for (col of data.columns; track col) {
+                <td
+                  class="heatmap-cell px-3 py-2 text-center font-medium transition-opacity"
+                  [ngStyle]="{
+                    'background-color': getCellBg(row, col),
+                    'color': getCellTextColor(row, col)
+                  }"
+                  [class.opacity-70]="hoveredCell !== null && (hoveredCell.row !== row || hoveredCell.col !== col)"
+                  (mouseenter)="onCellEnter($event, row, col)"
+                  (mousemove)="onCellMove($event)"
+                  (mouseleave)="onCellLeave()"
+                >
+                  {{ valueFormat(getCellValue(row, col)) }}
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+
+      <app-chart-tooltip [state]="tooltip" />
+
+      <!-- Color legend -->
+      <div class="mt-4 flex items-center gap-2 text-xs text-slate-500">
+        <span>Low</span>
+        <div class="h-3 w-40 rounded" style="background: linear-gradient(to right, #ffffcc, #fd8d3c, #bd0026);"></div>
+        <span>High</span>
+      </div>
+    }
+  </div>
+
+  <!-- Code snippets -->
+  <div class="space-y-6">
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Data Model</h3>
+      <app-code-block [code]="snippets.dataModel" title="heatmap-table.ts" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Color Scale — D3 sequential scale</h3>
+      <p class="mb-2 text-sm text-slate-500"><code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">scaleSequential</code> maps a continuous domain to a color interpolator like <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">interpolateYlOrRd</code>.</p>
+      <app-code-block [code]="snippets.colorScale" title="color scale setup" />
+    </div>
+
+    <div>
+      <h3 class="mb-2 text-base font-semibold text-slate-800">Rendering — HTML table with ngStyle</h3>
+      <p class="mb-2 text-sm text-slate-500">No SVG needed — use a standard <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">&lt;table&gt;</code> and bind D3-computed colors via <code class="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-blue-600">[ngStyle]</code>.</p>
+      <app-code-block [code]="snippets.render" title="table rendering" />
+    </div>
+
+    <!-- Key concepts -->
+    <div class="rounded-lg border border-slate-200 bg-white p-5">
+      <h3 class="mb-3 text-base font-semibold text-slate-800">Key D3 Concepts Used</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-scale-chromatic/sequential" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">d3.scaleSequential()</code></a><br><span class="text-xs text-slate-500">Maps a continuous domain to a color interpolator</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-scale-chromatic/sequential#interpolateYlOrRd" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">d3.interpolateYlOrRd</code></a><br><span class="text-xs text-slate-500">Yellow → Orange → Red color ramp</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><a href="https://d3js.org/d3-array/summarize#min" target="_blank" rel="noopener noreferrer"><code class="font-semibold text-blue-600 hover:underline">d3.min() / d3.max()</code></a><br><span class="text-xs text-slate-500">Auto-detect domain from data values</span></div>
+        <div class="rounded bg-slate-50 px-3 py-2 text-sm"><code class="font-semibold text-slate-600">[ngStyle]</code><br><span class="text-xs text-slate-500">Angular binding for dynamic inline styles</span></div>
+      </div>
+    </div>
+  </div>
+</div>

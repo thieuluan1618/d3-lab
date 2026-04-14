@@ -45,6 +45,12 @@ export interface ApiBulletRecord {
   score: number;
 }
 
+export interface ApiHeatmapTableData {
+  rows: string[];
+  columns: string[];
+  cells: { row: string; col: string; value: number }[];
+}
+
 export interface ApiLineSeriesRecord {
   name: string;
   values: { month: string; value: number }[];
@@ -153,6 +159,24 @@ export class MockApiService {
       { company: 'Ascension',          promoters: 44.1, neutrals: 31.2, detractors: 24.7 },
       { company: 'Marshfield Clinic',  promoters: 51.3, neutrals: 27.8, detractors: 20.9 },
     ]).pipe(delay(this.DELAY_MS));
+  }
+
+  // ── Heat Map Table: Company × metric matrix ─────────────────────────
+  getHeatmapData(): Observable<ApiHeatmapTableData> {
+    const rows = ['Bellin Health', 'Hospital Sisters', 'Aurora Health', 'ThedaCare', 'Ascension', 'Marshfield Clinic'];
+    const columns = ['Loyalty Index', 'Brand Score', 'Engagement', 'Need', 'Access (CES)', 'Motivation', 'Experience'];
+    const matrix: Record<string, number[]> = {
+      'Bellin Health':     [73.5, 79.3, 68.7, 72.4, 67.3, 74.8, 79.5],
+      'Hospital Sisters':  [65.8, 69.4, 63.2, 66.9, 62.4, 67.3, 58.2],
+      'Aurora Health':     [45.2, 55.1, 46.5, 49.8, 42.5, 48.1, 46.0],
+      'ThedaCare':         [40.1, 39.8, 37.2, 44.0, 39.1, 41.0, 38.5],
+      'Ascension':         [61.2, 64.5, 59.8, 63.1, 57.9, 62.4, 60.3],
+      'Marshfield Clinic': [69.8, 72.1, 65.4, 68.7, 64.2, 70.5, 67.8],
+    };
+    const cells = rows.flatMap((row) =>
+      columns.map((col, ci) => ({ row, col, value: matrix[row][ci] })),
+    );
+    return of({ rows, columns, cells }).pipe(delay(this.DELAY_MS));
   }
 
   // ── Bullet / Ranked Bar: Category index scores ──────────────────────
