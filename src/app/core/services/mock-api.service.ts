@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay } from 'rxjs';
 
 // ---------------------------------------------------------------------------
@@ -45,10 +46,47 @@ export interface ApiBulletRecord {
   score: number;
 }
 
-export interface ApiHeatmapTableData {
-  rows: string[];
-  columns: string[];
-  cells: { row: string; col: string; value: number }[];
+/**
+ * Heatmap API contract (FINAL — shared with BE team).
+ *
+ * Segments are top-level. Each segment owns its own flat `data[]` of
+ * records — one per market × year × column. `columns[]` is a deduped
+ * lookup table shared by every segment in the response.
+ *
+ * The FE applies ChartTransformService.heatmapResponseToChart() to nest
+ * each segment's data into the UI model (HeatmapChart) used by the
+ * heatmap-table component.
+ *
+ * Example payload: /public/data/heatmap-mental-health.json
+ */
+export interface ApiHeatmapColumn {
+  key: string;                  // stable identifier, e.g. "very_fam"
+  label: string;                // display label, e.g. "Very familiar"
+  order: number;                // column sort order, 1-based
+}
+
+export interface ApiHeatmapDataPoint {
+  marketType: string;           // "cbsa" | "national" | "state" | "dma" | ...
+  marketName: string;           // "Green Bay WI CBSA", "National"
+  year: number;
+  columnKey: string;            // FK → ApiHeatmapColumn.key
+  value: number | null;         // null = suppressed / no data
+  sampleSize: number;           // respondent count (n)
+}
+
+export interface ApiHeatmapSegment {
+  id: string;                   // "seg-mental-health"
+  label: string;                // "Term: Mental Health"
+  data: ApiHeatmapDataPoint[];  // flat records for this segment only
+}
+
+export interface ApiHeatmapResponse {
+  id: string;
+  serviceLine: string;          // "Mental Health", "Heart", ...
+  category: string;             // "Familiarity", "Travel Time", ...
+  question: string;             // survey question text
+  columns: ApiHeatmapColumn[];  // shared lookup table for all segments
+  segments: ApiHeatmapSegment[]; // each owns its own data[], display order honored
 }
 
 export interface ApiLineSeriesRecord {
@@ -63,6 +101,7 @@ export interface ApiLineSeriesRecord {
 @Injectable({ providedIn: 'root' })
 export class MockApiService {
   private readonly DELAY_MS = 300;
+  private readonly http = inject(HttpClient);
 
   // ── Bar Chart: Monthly revenue ──────────────────────────────────────
   getBarData(): Observable<ApiBarRecord[]> {
@@ -161,22 +200,14 @@ export class MockApiService {
     ]).pipe(delay(this.DELAY_MS));
   }
 
-  // ── Heat Map Table: Company × metric matrix ─────────────────────────
-  getHeatmapData(): Observable<ApiHeatmapTableData> {
-    const rows = ['Bellin Health', 'Hospital Sisters', 'Aurora Health', 'ThedaCare', 'Ascension', 'Marshfield Clinic'];
-    const columns = ['Loyalty Index', 'Brand Score', 'Engagement', 'Need', 'Access (CES)', 'Motivation', 'Experience'];
-    const matrix: Record<string, number[]> = {
-      'Bellin Health':     [73.5, 79.3, 68.7, 72.4, 67.3, 74.8, 79.5],
-      'Hospital Sisters':  [65.8, 69.4, 63.2, 66.9, 62.4, 67.3, 58.2],
-      'Aurora Health':     [45.2, 55.1, 46.5, 49.8, 42.5, 48.1, 46.0],
-      'ThedaCare':         [40.1, 39.8, 37.2, 44.0, 39.1, 41.0, 38.5],
-      'Ascension':         [61.2, 64.5, 59.8, 63.1, 57.9, 62.4, 60.3],
-      'Marshfield Clinic': [69.8, 72.1, 65.4, 68.7, 64.2, 70.5, 67.8],
-    };
-    const cells = rows.flatMap((row) =>
-      columns.map((col, ci) => ({ row, col, value: matrix[row][ci] })),
-    );
-    return of({ rows, columns, cells }).pipe(delay(this.DELAY_MS));
+  // ── Heat Map Table: Familiarity survey by market × year ─────────────
+  // Loads the flat BE response contract from a static JSON file.
+  // In prod this call will be replaced by a real endpoint returning the
+  // same `ApiHeatmapResponse` shape.
+  getHeatmapData(): Observable<ApiHeatmapResponse> {
+    return this.http
+      .get<ApiHeatmapResponse>('data/heatmap-mental-health.json')
+      .pipe(delay(this.DELAY_MS));
   }
 
   // ── Bullet / Ranked Bar: Category index scores ──────────────────────

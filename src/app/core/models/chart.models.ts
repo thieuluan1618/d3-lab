@@ -153,6 +153,53 @@ export interface ChartClickEvent<T = unknown> {
 }
 
 // ---------------------------------------------------------------------------
+// HEATMAP UI MODEL
+// Nested shape consumed by the heatmap-table component. Produced by
+// ChartTransformService.heatmapResponseToChart() from the flat API response.
+// ---------------------------------------------------------------------------
+
+export interface HeatmapChart {
+  id: string;
+  serviceLine: string;          // "Mental Health", "Heart"
+  category: string;             // "Familiarity", "Travel Time"
+  question: string;             // survey question text
+  years: number[];              // distinct years across the dataset, ascending
+  segments: HeatmapSegment[];   // one rendered table per segment
+}
+
+export interface HeatmapSegment {
+  id: string;
+  label: string;
+  columns: HeatmapColumn[];     // sorted by `order`
+  groups: HeatmapGroup[];       // one per market
+}
+
+export interface HeatmapGroup {
+  marketType: string;           // "cbsa", "national", "state", "dma", ...
+  marketName: string;           // "Green Bay WI CBSA", "National"
+  rows: HeatmapRow[];           // one per year, ascending
+}
+
+export interface HeatmapColumn {
+  key: string;
+  label: string;
+  order: number;
+}
+
+export interface HeatmapRow {
+  year: number;
+  cells: HeatmapCell[];
+}
+
+export interface HeatmapCell {
+  columnKey: string;
+  value: number | null;         // null = no data
+  displayValue?: string;        // "29.33%"
+  colorValue?: number;          // override used for color scale (optional)
+  sampleSize?: number;          // respondent count for tooltip
+}
+
+// ---------------------------------------------------------------------------
 // CHART VIEW MODEL
 // Top-level model for a dashboard panel — ties config + data + UI state.
 // Equivalent to a single Tableau worksheet.

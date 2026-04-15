@@ -7,5 +7,17 @@
 
 .heatmap-cell {
   cursor: default;
-  min-width: 72px;
+  min-width: 80px;
+}
+
+.heatmap-header-geo {
+  min-width: 160px;
+}
+
+.heatmap-header-year {
+  min-width: 60px;
+}
+
+.heatmap-geo-cell {
+  border-right: 2px solid #cbd5e1;
 }

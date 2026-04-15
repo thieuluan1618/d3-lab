@@ -1,0 +1,97 @@
+{
+  "id": "mh-familiarity",
+  "serviceLine": "Mental Health",
+  "category": "Familiarity",
+  "question": "How familiar are you with the following terms?",
+  "columns": [
+    { "key": "very_fam", "label": "Very familiar", "order": 1 },
+    { "key": "somewhat_fam", "label": "Somewhat familiar", "order": 2 },
+    { "key": "neither", "label": "Neither familiar nor unfamiliar", "order": 3 },
+    { "key": "somewhat_unf", "label": "Somewhat unfamiliar", "order": 4 },
+    { "key": "very_unf", "label": "Very unfamiliar", "order": 5 }
+  ],
+  "segments": [
+    {
+      "id": "seg-mental-health",
+      "label": "Term: Mental Health",
+      "data": [
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "very_fam", "value": 62.55, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "somewhat_fam", "value": 25.18, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "neither", "value": 7.42, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "somewhat_unf", "value": 3.21, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "very_unf", "value": 1.64, "sampleSize": 487 },
+
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "very_fam", "value": 64.12, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "somewhat_fam", "value": 23.87, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "neither", "value": 6.98, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "somewhat_unf", "value": 3.05, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "very_unf", "value": 1.98, "sampleSize": 512 },
+
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "very_fam", "value": 65.30, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "somewhat_fam", "value": 22.45, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "neither", "value": 7.10, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "somewhat_unf", "value": 3.48, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "very_unf", "value": 1.67, "sampleSize": 498 },
+
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "very_fam", "value": 58.42, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "somewhat_fam", "value": 27.33, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "neither", "value": 8.15, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "somewhat_unf", "value": 3.78, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "very_unf", "value": 2.32, "sampleSize": 2140 },
+
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "very_fam", "value": 59.87, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "somewhat_fam", "value": 26.10, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "neither", "value": 7.92, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "somewhat_unf", "value": 3.65, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "very_unf", "value": 2.46, "sampleSize": 2235 },
+
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "very_fam", "value": 61.05, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "somewhat_fam", "value": 25.22, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "neither", "value": 7.68, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "somewhat_unf", "value": 3.90, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "very_unf", "value": 2.15, "sampleSize": 2310 }
+      ]
+    },
+    {
+      "id": "seg-behavioral-health",
+      "label": "Term: Behavioral Health",
+      "data": [
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "very_fam", "value": 29.33, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "somewhat_fam", "value": 35.10, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "neither", "value": 18.72, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "somewhat_unf", "value": 10.45, "sampleSize": 487 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2023, "columnKey": "very_unf", "value": 6.40, "sampleSize": 487 },
+
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "very_fam", "value": 31.05, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "somewhat_fam", "value": 34.28, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "neither", "value": 17.90, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "somewhat_unf", "value": 10.12, "sampleSize": 512 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2024, "columnKey": "very_unf", "value": 6.65, "sampleSize": 512 },
+
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "very_fam", "value": 32.18, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "somewhat_fam", "value": 33.55, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "neither", "value": 17.42, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "somewhat_unf", "value": 10.80, "sampleSize": 498 },
+        { "marketType": "cbsa", "marketName": "Green Bay WI CBSA", "year": 2025, "columnKey": "very_unf", "value": 6.05, "sampleSize": 498 },
+
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "very_fam", "value": 25.18, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "somewhat_fam", "value": 32.45, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "neither", "value": 20.33, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "somewhat_unf", "value": 12.82, "sampleSize": 2140 },
+        { "marketType": "national", "marketName": "National", "year": 2023, "columnKey": "very_unf", "value": 9.22, "sampleSize": 2140 },
+
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "very_fam", "value": 26.42, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "somewhat_fam", "value": 31.90, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "neither", "value": 19.85, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "somewhat_unf", "value": 12.55, "sampleSize": 2235 },
+        { "marketType": "national", "marketName": "National", "year": 2024, "columnKey": "very_unf", "value": 9.28, "sampleSize": 2235 },
+
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "very_fam", "value": 27.60, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "somewhat_fam", "value": 31.22, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "neither", "value": 19.40, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "somewhat_unf", "value": 12.30, "sampleSize": 2310 },
+        { "marketType": "national", "marketName": "National", "year": 2025, "columnKey": "very_unf", "value": 9.48, "sampleSize": 2310 }
+      ]
+    }
+  ]
+}

@@ -2,10 +2,16 @@ import { Injectable } from '@angular/core';
 import {
   ChartPoint,
   ChartSeries,
+  HeatmapCell,
+  HeatmapChart,
+  HeatmapGroup,
+  HeatmapRow,
+  HeatmapSegment,
   MetricRecord,
   PeriodData,
   TooltipSeries,
 } from '../models';
+import { ApiHeatmapResponse } from './mock-api.service';
 
 /**
  * ChartTransformService
@@ -72,5 +78,68 @@ export class ChartTransformService {
       ...p,
       y: total > 0 ? (p.y / total) * 100 : 0,
     }));
+  }
+
+  /**
+   * Transform the heatmap API response into the nested `HeatmapChart` model
+   * consumed by `<app-d3-heatmap-table>`.
+   *
+   * For each segment, its flat `data[]` is grouped:
+   *   marketName → year → cells
+   *
+   * Segment order honors `response.segments` (BE-defined). Markets are
+   * emitted in first-seen order. Years are sorted ascending.
+   */
+  heatmapResponseToChart(response: ApiHeatmapResponse): HeatmapChart {
+    const sortedColumns = [...response.columns].sort((a, b) => a.order - b.order);
+    const yearsSet = new Set<number>();
+
+    interface GroupAccum { marketType: string; rows: Map<number, HeatmapCell[]> }
+
+    const segments: HeatmapSegment[] = response.segments.map((segMeta) => {
+      const marketMap = new Map<string, GroupAccum>();
+
+      for (const d of segMeta.data) {
+        yearsSet.add(d.year);
+
+        let grp = marketMap.get(d.marketName);
+        if (!grp) {
+          grp = { marketType: d.marketType, rows: new Map() };
+          marketMap.set(d.marketName, grp);
+        }
+
+        let cells = grp.rows.get(d.year);
+        if (!cells) {
+          cells = [];
+          grp.rows.set(d.year, cells);
+        }
+
+        cells.push({
+          columnKey: d.columnKey,
+          value: d.value,
+          displayValue: d.value !== null ? `${d.value.toFixed(2)}%` : undefined,
+          sampleSize: d.sampleSize,
+        });
+      }
+
+      const groups: HeatmapGroup[] = [];
+      for (const [marketName, grp] of marketMap) {
+        const rows: HeatmapRow[] = [...grp.rows.entries()]
+          .sort(([a], [b]) => a - b)
+          .map(([year, cells]) => ({ year, cells }));
+        groups.push({ marketType: grp.marketType, marketName, rows });
+      }
+
+      return { id: segMeta.id, label: segMeta.label, columns: sortedColumns, groups };
+    });
+
+    return {
+      id: response.id,
+      serviceLine: response.serviceLine,
+      category: response.category,
+      question: response.question,
+      years: [...yearsSet].sort((a, b) => a - b),
+      segments,
+    };
   }
 }
