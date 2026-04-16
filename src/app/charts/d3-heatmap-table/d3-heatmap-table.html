@@ -34,9 +34,26 @@
       <div class="flex h-40 items-center justify-center text-sm text-slate-400">Loading…</div>
     } @else {
       <!-- Chart title bar -->
-      <div class="mb-4">
-        <h3 class="text-lg font-semibold text-slate-800">{{ chart.serviceLine }}</h3>
-        <p class="text-sm text-slate-500">{{ chart.category }} — <span class="italic">{{ chart.question }}</span></p>
+      <div class="mb-4 flex items-start justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-800">{{ chart.serviceLine }}</h3>
+          <p class="text-sm text-slate-500">{{ chart.category }} — <span class="italic">{{ chart.question }}</span></p>
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="flex items-center gap-1.5 text-xs text-slate-500">
+            From
+            <input type="color" [value]="activeColorFrom" (input)="onColorFromChange($event)" class="h-7 w-9 cursor-pointer rounded border border-slate-300" />
+          </label>
+          <label class="flex items-center gap-1.5 text-xs text-slate-500">
+            To
+            <input type="color" [value]="activeColorTo" (input)="onColorToChange($event)" class="h-7 w-9 cursor-pointer rounded border border-slate-300" />
+          </label>
+          <label class="flex items-center gap-1.5 text-xs text-slate-500">
+            Steps
+            <input type="range" min="0" max="10" [value]="activeColorSteps" (input)="onColorStepsChange($event)" class="w-20" />
+            <span class="w-8 text-center">{{ activeColorSteps || '∞' }}</span>
+          </label>
+        </div>
       </div>
 
       <!-- One table per segment -->
@@ -103,7 +120,15 @@
       <!-- Color legend -->
       <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
         <span>Low</span>
-        <div class="h-3 w-40 rounded" style="background: linear-gradient(to right, #fff5eb, #fd8d3c, #8c2d04);"></div>
+        @if (activeColorSteps > 0) {
+          <div class="flex h-3 overflow-hidden rounded">
+            @for (color of legendSteps; track $index) {
+              <div class="h-full w-7" [ngStyle]="{ 'background-color': color }"></div>
+            }
+          </div>
+        } @else {
+          <div class="h-3 w-40 rounded" [ngStyle]="{ 'background': 'linear-gradient(to right, ' + activeColorFrom + ', ' + activeColorTo + ')' }"></div>
+        }
         <span>High</span>
       </div>
     }

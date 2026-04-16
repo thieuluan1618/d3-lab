@@ -165,6 +165,9 @@ export interface HeatmapChart {
   question: string;             // survey question text
   years: number[];              // distinct years across the dataset, ascending
   segments: HeatmapSegment[];   // one rendered table per segment
+  colorFrom?: string;            // low-end color for the sequential interpolator (default: "#ffffff")
+  colorTo?: string;              // high-end color for the sequential interpolator (default: "#e8590c")
+  colorSteps?: number;           // number of discrete color bands (0 = continuous, default: 0)
 }
 
 export interface HeatmapSegment {

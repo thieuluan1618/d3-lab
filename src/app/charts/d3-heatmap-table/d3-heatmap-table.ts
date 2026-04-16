@@ -39,8 +39,11 @@ export class D3HeatmapTableComponent implements OnInit {
   loading = true;
   tooltip: TooltipState = emptyTooltip();
   hoveredKey: string | null = null; // "segId|geo|year|colKey"
+  activeColorFrom = '#ffffff';
+  activeColorTo = '#e8590c';
+  activeColorSteps = 0; // 0 = continuous
 
-  private colorScale!: d3.ScaleSequential<string>;
+  private colorScale!: d3.ScaleSequential<string> | d3.ScaleQuantize<string>;
   private readonly api = inject(MockApiService);
   private readonly transform = inject(ChartTransformService);
 
@@ -48,6 +51,7 @@ export class D3HeatmapTableComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.chart?.segments?.length) {
+      this.applyChartColors();
       this.loading = false;
       this.buildColorScale();
     } else {
@@ -56,10 +60,32 @@ export class D3HeatmapTableComponent implements OnInit {
         .pipe(map((response) => this.transform.heatmapResponseToChart(response)))
         .subscribe((chart) => {
           this.chart = chart;
+          this.applyChartColors();
           this.loading = false;
           this.buildColorScale();
         });
     }
+  }
+
+  private applyChartColors(): void {
+    if (this.chart.colorFrom) this.activeColorFrom = this.chart.colorFrom;
+    if (this.chart.colorTo) this.activeColorTo = this.chart.colorTo;
+    if (this.chart.colorSteps) this.activeColorSteps = this.chart.colorSteps;
+  }
+
+  onColorFromChange(event: Event): void {
+    this.activeColorFrom = (event.target as HTMLInputElement).value;
+    this.buildColorScale();
+  }
+
+  onColorToChange(event: Event): void {
+    this.activeColorTo = (event.target as HTMLInputElement).value;
+    this.buildColorScale();
+  }
+
+  onColorStepsChange(event: Event): void {
+    this.activeColorSteps = +(event.target as HTMLInputElement).value;
+    this.buildColorScale();
   }
 
   // ── Color scale ────────────────────────────────────────────────────
@@ -75,9 +101,20 @@ export class D3HeatmapTableComponent implements OnInit {
         }
       }
     }
-    this.colorScale = d3
-      .scaleSequential(d3.interpolateOranges)
-      .domain([0, d3.max(values) ?? 100]);
+    const max = d3.max(values) ?? 100;
+    const interpolate = d3.interpolateRgb(this.activeColorFrom, this.activeColorTo);
+    if (this.activeColorSteps > 0) {
+      const range = d3.range(this.activeColorSteps).map((i) => interpolate(i / (this.activeColorSteps - 1)));
+      this.colorScale = d3.scaleQuantize<string>().domain([0, max]).range(range);
+    } else {
+      this.colorScale = d3.scaleSequential(interpolate).domain([0, max]);
+    }
+  }
+
+  get legendSteps(): string[] {
+    if (this.activeColorSteps <= 0) return [];
+    const interpolate = d3.interpolateRgb(this.activeColorFrom, this.activeColorTo);
+    return d3.range(this.activeColorSteps).map((i) => interpolate(i / (this.activeColorSteps - 1)));
   }
 
   getCellBg(cell: HeatmapCell): string {
